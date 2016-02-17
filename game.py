@@ -2,6 +2,7 @@ __author__ = 'Alastair Kerr'
 
 from player import Player
 from board import Board
+from scorer import Scorer
 
 
 class Game():
@@ -48,27 +49,19 @@ class Game():
         self.resetBoard()
         self.roundNumber += 1
 
-    def scoreAll(self):
+    def scoreBoard(self):
         """
-        Score every player's hand and modify their scores accordingly
-        Naive method for now simply adding player's positive scores; TBD implement proper scoring system
+        Scores the board
         :return: None
         """
-        for p in self.players:
-            print("Scoring player %i") % p.playerNumber
-            placements = self.board.placements[p.playerNumber -1]
-            topRowScores = placements.topRow.scoreAndClassify()
-            middleRowScores = placements.middleRow.scoreAndClassify()
-            bottomRowScores = placements.bottomRow.scoreAndClassify()
-            print("%s\n%s\n%s") % (topRowScores, middleRowScores, bottomRowScores)
-            if bottomRowScores[1] >= middleRowScores[1] >= topRowScores[1]:
-                print("OK\n")
-            else:
-                print("FOUL\n")
+        scoring = Scorer(players=self.players, board=self.board)
+        scoring.scoreAll()
+
 
 
 if __name__ == "__main__":
     # Testing functionality
-    g = Game(playerCount=4)
-    g.board.randomlyPopulateBoard()
-    g.scoreAll()
+    for i in range(0,1):
+        g = Game(playerCount=4)
+        g.board.randomlyPopulateBoard()
+        g.scoreBoard()
