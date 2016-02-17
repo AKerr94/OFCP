@@ -1,4 +1,4 @@
-# Author: Alastair Kerr
+__author__ = 'Alastair Kerr'
 
 import random
 

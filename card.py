@@ -1,4 +1,4 @@
-# Author: Alastair Kerr
+__author__ = 'Alastair Kerr'
 
 class Card():
     def __init__(self, rank='A', suit='H'):

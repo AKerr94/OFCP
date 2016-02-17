@@ -1,13 +1,11 @@
-# Author: Alastair Kerr
-
-from row import Row
+__author__ = 'Alastair Kerr'
 
 
 class Player():
     def __init__(self, playerNumber=1, score=0):
         """
         Initialise player object
-        Each player has a top, middle and bottom row of cards, a player number, and a score
+        Each player has a player number, a score and a Placement object with a top, middle and bottom row
         :return: None
         """
         assert isinstance(playerNumber, int)
@@ -16,6 +14,3 @@ class Player():
 
         self.playerNumber = playerNumber
         self.score = score
-        self.bottomRow = Row(size=5, rowName='Bottom', playerNumber=self.playerNumber)
-        self.middleRow = Row(size=5, rowName='Middle', playerNumber=self.playerNumber)
-        self.topRow = Row(size=3, rowName='Top', playerNumber=self.playerNumber)

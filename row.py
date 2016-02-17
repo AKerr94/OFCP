@@ -1,6 +1,6 @@
-# Author: Alastair Kerr
+__author__ = 'Alastair Kerr'
 
-import eval
+import eval, eval3c
 from deck import Deck
 from card import Card
 
@@ -30,7 +30,7 @@ class Row():
             except:
                 self.cardPlacements.append(None)
 
-    def setPlacement(self, c=Card(), position=1):
+    def setPlacement(self, c=Card(), position=1, force=False):
         """
         Set a given position's card placement as the given card object
         :param c: Card object
@@ -41,7 +41,8 @@ class Row():
         assert isinstance(position, int)
         assert 1 <= position <= self.size
 
-        self.cardPlacements[position -1] = c
+        if (self.cardPlacements[position -1] == None or force):
+            self.cardPlacements[position -1] = c
 
     def getPokerHand(self):
         """
@@ -60,7 +61,10 @@ class Row():
         :return: Poker hand score
         """
         self.getPokerHand()
-        return eval.score_5(self.pokerHand)
+        if (self.size == 3):
+            return eval3c.score_3(self.pokerHand)
+        elif (self.size == 5):
+            return eval.score_5(self.pokerHand)
 
     def classifyRow(self):
         """
@@ -68,7 +72,21 @@ class Row():
         :return: Poker hand class
         """
         self.getPokerHand()
-        return eval.classify_5(self.pokerHand)
+        if (self.size == 3):
+            return eval3c.classify_3(self.pokerHand)
+        elif (self.size == 5):
+            return eval.classify_5(self.pokerHand)
+
+    def scoreAndClassify(self):
+        """
+        Function to score and classify this row's poker hand
+        :return: List [pokerHand, score, classification]
+        """
+        self.getPokerHand()
+        score = self.scoreRow()
+        classification = self.classifyRow()
+        return [self.pokerHand, score, classification]
+
 
 if __name__ == "__main__":
     # Testing functionality - initialise row with 5 random cards and classify this poker hand
