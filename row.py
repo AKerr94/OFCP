@@ -16,6 +16,8 @@ class Row():
         assert isinstance(playerNumber, int)
         assert 1 <= playerNumber <= 4
         assert isinstance(cardPlacements, list)
+        for c in cardPlacements:
+            assert isinstance(c, Card)
 
         self.size = size
         self.rowName = rowName

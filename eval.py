@@ -120,7 +120,7 @@ def checkStraightFlushes(hand):
     ranks = []
     suits = []
     for i in xrange(0,9,2):
-        ranks.append(int(rankValToChar(hand[i])))
+        ranks.append(int(rankCharToVal(hand[i])))
     for i in xrange(1,10,2):
         suits.append(hand[i])
 
