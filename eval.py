@@ -141,11 +141,11 @@ def checkStraightFlushes(hand):
 
     # Return
     if (flush and straight):
-        return (9, int(rankValToChar(ranks[4])))
+        return (9, ranks[4])
     elif (flush):
-        return (6, int(rankValToChar(ranks[4])), int(rankValToChar(ranks[3])))
+        return (6, ranks[4], ranks[3])
     elif (straight):
-        return (5, int(rankValToChar(ranks[4])))
+        return (5, ranks[4])
     else:
         return None
 
