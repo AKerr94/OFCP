@@ -1,6 +1,6 @@
 __author__ = 'Alastair Kerr'
 
-class Card():
+class Card(object):
     def __init__(self, rank='A', suit='H'):
         """
         Initialise card

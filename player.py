@@ -1,7 +1,7 @@
 __author__ = 'Alastair Kerr'
 
 
-class Player():
+class Player(object):
     def __init__(self, playerNumber=1, score=0):
         """
         Initialise player object

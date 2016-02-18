@@ -5,7 +5,7 @@ import random
 from card import Card
 
 
-class Deck ():
+class Deck (object):
     def __init__(self, shuffled=True, currentPosition=0):
         """
         Initialise deck object with 52 cards

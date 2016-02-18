@@ -5,7 +5,7 @@ from board import Board
 from scorer import Scorer
 
 
-class Game():
+class Game(object):
     def __init__(self, playerCount=2):
         """
         Initialise Game object

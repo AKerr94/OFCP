@@ -5,7 +5,7 @@ from deck import Deck
 from card import Card
 
 
-class Row():
+class Row(object):
     def __init__(self, size=5, rowName='Bottom', playerNumber=1, cardPlacements=[]):
         """
         Initialise row of given size (3 or 5), rowName (Bottom, Middle or Top), playerNumber (1-4), and cards placed

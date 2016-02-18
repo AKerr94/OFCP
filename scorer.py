@@ -7,7 +7,7 @@ from player import Player
 from board import Board
 
 
-class Scorer():
+class Scorer(object):
     def __init__(self, players=[], board=None):
         """
         Initialise Scorer object with list of Player objects

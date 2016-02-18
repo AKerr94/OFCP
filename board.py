@@ -4,7 +4,7 @@ from placement import Placement
 from deck import Deck
 
 
-class Board():
+class Board(object):
     def __init__(self, playerCount=2):
         """
         Initialise board object composed of Player objects for each player and a Deck object
