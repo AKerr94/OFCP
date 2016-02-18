@@ -18,9 +18,9 @@ class GameHandler(object):
         assert isinstance(gameState, dict)
 
         self.game = None
-        if (variant == 'ofc'):
+        if (variant.lower() == 'ofc'):
             self.game = OFC(playerCount=playerCount)
-        elif (variant == 'pineapple'):
+        elif (variant.lower() == 'pineapple'):
             self.game = Pineapple(playerCount=playerCount)
 
         self.gameState = gameState
