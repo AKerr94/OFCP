@@ -18,6 +18,7 @@ class Scorer():
         assert isinstance(board, Board)
         self.players = players
         self.board = board
+        self.scoresMessages = []
 
     def scoreAll(self):
         """
@@ -26,6 +27,7 @@ class Scorer():
         :param players: List of Player objects
         :return: None
         """
+        self.scoresMessages = []
         for p in self.players:
             assert isinstance(p, Player)
             p.scoresList = self.scorePlayer(p)
@@ -36,11 +38,8 @@ class Scorer():
         combinations = itertools.combinations(self.players, 2)
         for combination in combinations:
             scoresMessage = self.evalPlayersScores(combination[0], combination[1])
-            print(scoresMessage)
+            self.scoresMessages.append(scoresMessage)
 
-        print ""
-        for p in self.players:
-            print "Player %i's final score this round = %i" % (p.playerNumber, p.score)
 
     def scorePlayer(self, player):
         """
@@ -51,17 +50,14 @@ class Scorer():
         assert isinstance(player, Player)
 
         fouled = False
-        print("Scoring player %i" % player.playerNumber)
         placements = self.board.placements[player.playerNumber -1]
         topRowScores = placements.topRow.scoreAndClassify()
         middleRowScores = placements.middleRow.scoreAndClassify()
         bottomRowScores = placements.bottomRow.scoreAndClassify()
-        print("%s\n%s\n%s" % (topRowScores, middleRowScores, bottomRowScores))
 
         if bottomRowScores[1] >= middleRowScores[1] >= topRowScores[1]:
-            print("OK\n")
+            pass
         else:
-            print("FOUL\n")
             fouled = True
 
         return [fouled, bottomRowScores, middleRowScores, topRowScores]

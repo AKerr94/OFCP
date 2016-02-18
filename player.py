@@ -15,5 +15,4 @@ class Player():
         self.playerNumber = playerNumber
         self.score = score
         self.scoresList = None # This is used to store information about a player's row scores on the current round
-                               # List [Bool fouled, scores list bottom row, scores list middle row score, scores list top row score]
-                               # Scores lists contain [Poker hand string, score tuple, hand classification string]
+                               # List [Bool fouled, tuple bottom row score, tuple middle row score, tuple top row score]

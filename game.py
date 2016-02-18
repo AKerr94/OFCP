@@ -33,6 +33,8 @@ class Game():
             if (p != None):
                 self.players.append(p)
 
+        self.scoring = Scorer(players=self.players, board=self.board)
+
     def resetBoard(self):
         """
         Clears board and generates new deck of cards
@@ -54,9 +56,7 @@ class Game():
         Scores the board
         :return: None
         """
-        scoring = Scorer(players=self.players, board=self.board)
-        scoring.scoreAll()
-
+        self.scoring.scoreAll()
 
 
 if __name__ == "__main__":
@@ -65,3 +65,9 @@ if __name__ == "__main__":
         g = Game(playerCount=4)
         g.board.randomlyPopulateBoard()
         g.scoreBoard()
+        for msg in g.scoring.scoresMessages:
+            print(msg)
+        print ""
+        for p in g.players:
+            print("Player %i's total score after this round = %i" % (p.playerNumber, p.score))
+
