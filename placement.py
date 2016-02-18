@@ -9,6 +9,9 @@ class Placement(object):
         Initialise placement - object with a top, middle and bottom row
         :return: None
         """
+        assert isinstance(playerNumber, int)
+        assert 1 <= playerNumber <= 4
+
         self.playerNumber = playerNumber
         self.bottomRow = Row(size=5, rowName='Bottom', playerNumber=playerNumber)
         self.middleRow = Row(size=5, rowName='Middle', playerNumber=playerNumber)

@@ -45,6 +45,8 @@ class Deck (object):
         :return: Card object
         """
         self.currentPosition += 1
+        if (self.currentPosition > 52):
+            raise ValueError("Run out of cards in the deck!")
         return self.deck[self.currentPosition -1]
 
     def deal_n(self, n):

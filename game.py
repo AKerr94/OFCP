@@ -6,7 +6,7 @@ from scorer import Scorer
 
 
 class Game(object):
-    def __init__(self, playerCount=2):
+    def __init__(self, playerCount=2, firstToAct=1):
         """
         Initialise Game object
         Each game has a current round number, Player objects and a board object for each round
@@ -16,6 +16,9 @@ class Game(object):
         assert 2 <= playerCount <= 4
 
         self.playerCount = playerCount
+        self.nextToAct = firstToAct
+        self.actingOrder = self.generateActingOrder(firstToAct=firstToAct)
+        self.actingOrderPointer = 0
         self.roundNumber = 1
         self.board = Board(playerCount=playerCount)
 
@@ -58,11 +61,57 @@ class Game(object):
         """
         self.scoring.scoreAll()
 
+    def generateActingOrder(self, firstToAct=1):
+        """
+        Generates actingOrder for clockwise rotation of player action
+        :param firstToAct: int first player number to act
+        :return: List actingOrder [first playerNumber, second playerNumber ..]
+        """
+        assert isinstance(firstToAct, int)
+        assert 1 < firstToAct <= self.playerCount
+
+        actingOrder = []
+        for i in range(firstToAct, self.playerCount + 1):
+            actingOrder.append(i)
+
+        for i in range(1, firstToAct):
+            actingOrder.append(i)
+
+        return actingOrder
+
+    def incrementNextToAct(self):
+        """
+        Increments nextToAct var - if last player has acted, go back to first player for next round of placements
+        :return: None
+        """
+        if (self.nextToAct == self.actingOrder[self.playerCount - 1]):
+            self.actingOrderPointer = 0
+            self.nextToAct = self.actingOrder[0]
+        else:
+            self.actingOrderPointer += 1
+            self.nextToAct = self.actingOrder[self.actingOrderPointer]
+
+    def dealFirstHand(self, playerNumber=1):
+        """
+        Deal 5 cards to the given player
+        :param playerNumber: int playerNumber
+        :return: 5 card objects
+        """
+        assert isinstance(playerNumber, int)
+        assert 1 < playerNumber <= self.playerCount
+
+        if (len(self.players[playerNumber - 1].cards) > 0):
+            raise ValueError("Player already has cards dealt!")
+        cards = self.board.deck.deal_n(5)
+        self.players[playerNumber - 1].cards = cards
+        return cards
+
 
 if __name__ == "__main__":
     # Testing functionality
     for i in range(0,1):
-        g = Game(playerCount=4)
+        g = Game(playerCount=4, firstToAct=2)
+        print("Order of player action: %s\n" % g.actingOrder)
         g.board.randomlyPopulateBoard()
         g.scoreBoard()
         for msg in g.scoring.scoresMessages:

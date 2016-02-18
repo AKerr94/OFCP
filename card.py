@@ -7,9 +7,9 @@ class Card(object):
         :return: None
         """
         assert isinstance(rank, basestring)
-        assert len(rank) == 1
+        assert rank.upper() in ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A']
         assert isinstance(suit, basestring)
-        assert len(suit) == 1
+        assert suit.upper() in ['H', 'S', 'D', 'C']
 
         self.rank = rank
         self.suit = suit

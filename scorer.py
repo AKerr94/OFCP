@@ -106,6 +106,9 @@ class Scorer(object):
         :param player2: Player object
         :return: int total points player 1 won from player 2
         """
+        assert isinstance(player1, Player)
+        assert isinstance(player2, Player)
+
         p1original = player1.score
 
         # Bottom row
@@ -189,6 +192,7 @@ class Scorer(object):
         :param rowName: Bottom, Middle or Top
         :return: int points
         """
+        assert isinstance(score, tuple)
         assert isinstance(rowName, basestring)
         assert rowName in ['Bottom', 'Middle', 'Top']
 
