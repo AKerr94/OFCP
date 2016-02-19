@@ -1,6 +1,7 @@
 __author__ = 'Alastair Kerr'
 
 from row import Row
+from card import Card
 
 
 class Placement(object):
@@ -16,3 +17,29 @@ class Placement(object):
         self.bottomRow = Row(size=5, rowName='Bottom', playerNumber=playerNumber)
         self.middleRow = Row(size=5, rowName='Middle', playerNumber=playerNumber)
         self.topRow = Row(size=3, rowName='Top', playerNumber=playerNumber)
+
+    def setRow(self, row='Bottom', cards=[]):
+        """
+        Sets a given row with cards provided
+        :param cards: List of Card objects
+        :return: None
+        """
+        assert isinstance(row, basestring)
+        assert row.lower() in ['bottom', 'middle', 'top']
+        assert isinstance(cards, list)
+        if row.lower() in ['bottom', 'middle']:
+            assert len(row) <= 5
+        elif row.lower() == 'top':
+            assert len(row) <= 3
+
+        for i in range(1, len(cards) + 1):
+            assert isinstance(cards[i-1], Card)
+
+            if (row.lower() == 'bottom'):
+                self.bottomRow.setPlacement(c=cards[i-1], position=i)
+
+            elif (row.lower() == 'middle'):
+                self.middleRow.setPlacement(c=cards[i-1], position=i)
+
+            else:
+                self.topRow.setPlacement(c=cards[i-1], position=i)

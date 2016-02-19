@@ -6,14 +6,19 @@ from scorer import Scorer
 
 
 class Game(object):
-    def __init__(self, playerCount=2, firstToAct=1):
+    def __init__(self, playerCount=2, firstToAct=1, deck=None):
         """
         Initialise Game object
         Each game has a current round number, Player objects and a board object for each round
+        :param playerCount: int number of players
+        :param firstToAct: int playerNumber who acts first this round
+        :param deck: 104 char string containing card names format <rank><suit>*52
         :return: None
         """
         assert isinstance(playerCount, int)
         assert 2 <= playerCount <= 4
+        assert isinstance(firstToAct, int)
+        assert 1 <= firstToAct <= 4
 
         self.playerCount = playerCount
         self.firstToAct = firstToAct
@@ -21,7 +26,7 @@ class Game(object):
         self.actingOrder = self.generateActingOrder(firstToAct=firstToAct)
         self.actingOrderPointer = 0
         self.roundNumber = 1
-        self.board = Board(playerCount=playerCount)
+        self.board = Board(playerCount=playerCount, deck=deck)
 
         self.player1 = Player(playerNumber=1)
         self.player2 = Player(playerNumber=2)

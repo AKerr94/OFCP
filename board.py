@@ -2,10 +2,11 @@ __author__ = 'Alastair Kerr'
 
 from placement import Placement
 from deck import Deck
+from card import Card
 
 
 class Board(object):
-    def __init__(self, playerCount=2):
+    def __init__(self, playerCount=2, deck=None):
         """
         Initialise board object composed of Player objects for each player and a Deck object
         :return: None
@@ -14,7 +15,7 @@ class Board(object):
         assert 2 <= playerCount <= 4
 
         self.playerCount = playerCount
-        self.deck = Deck()
+        self.deck = Deck(deck=deck)
 
         self.player1placements = Placement(playerNumber=1)
         self.player2placements = Placement(playerNumber=2)
@@ -29,6 +30,28 @@ class Board(object):
         for p in [self.player1placements, self.player2placements, self.player3placements, self.player4placements]:
             if (p != None):
                 self.placements.append(p)
+
+    def setPlacement(self, playerNumber=1, bottomRowCards=[], middleRowCards=[], topRowCards=[]):
+        """
+        Used to set card placements for given player
+        :param playerNumber: int 1-4
+        :param bottomRowCards: List of Card objects
+        :param middleRowCards: List of Card objects
+        :param topRowCards: List of Card objects
+        :return: None
+        """
+        assert isinstance(playerNumber, int)
+        assert 1 < playerNumber <= 4
+        for row in [bottomRowCards, middleRowCards, topRowCards]:
+            assert isinstance(row, list)
+            assert len(row) <= 5
+            for card in row:
+                assert isinstance(card, Card)
+
+        self.placements[playerNumber - 1].setRow(row='Bottom', cards=bottomRowCards)
+        self.placements[playerNumber - 1].setRow(row='Middle', cards=middleRowCards)
+        self.placements[playerNumber - 1].setRow(row='Top', cards=topRowCards)
+
 
     def randomlyPopulateBoard(self):
         """

@@ -45,6 +45,8 @@ class Row(object):
 
         if (self.cardPlacements[position -1] == None or force):
             self.cardPlacements[position -1] = c
+        else:
+            raise ValueError("Tried to place a card where one already exists!")
 
     def getPokerHand(self):
         """
