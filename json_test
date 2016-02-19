@@ -1,0 +1,38 @@
+{
+	"playerCount": 2,
+	"variant": "ofc",
+	"players": {
+		"1": {
+			"playerNumber": 1,
+			"score": 0,
+			"cards": ""
+		},
+		"2": {
+			"playerNumber": 2,
+			"score": 0,
+			"cards": ""
+		}
+	},
+	"gameState": {
+		"roundNumber": 1,
+		"roundActionNumber": 1,
+		"firstToAct": 1,
+		"nextToAct": 2,
+		"deck": "2H2D2S2C3H3D3S3C4H4D4S4C5H5D5S5C6H6D6S6C7H7D7S7C8H8D8S8C9H9D9S9CTHTDTSTCJHJDJSJCQHQDQSQCKHKDKSKCAHADASAC",
+		"deckPointer": 0,
+		"placements": {
+			"1": {
+				"playerNumber": 1,
+				"topRow": "",
+				"middleRow": "",
+				"bottomRow": ""
+			},
+			"2": {
+				"playerNumber": 2,
+				"topRow": "",
+				"middleRow": "",
+				"bottomRow": ""
+			}
+		}
+	}
+}

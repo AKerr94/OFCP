@@ -2,7 +2,6 @@ __author__ = 'Alastair Kerr'
 
 import itertools
 
-
 from player import Player
 from board import Board
 

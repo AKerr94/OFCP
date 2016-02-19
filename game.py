@@ -6,7 +6,7 @@ from scorer import Scorer
 
 
 class Game(object):
-    def __init__(self, playerCount=2, firstToAct=1, deck=None):
+    def __init__(self, playerCount=2, firstToAct=1, deck=None, deckPosition=0):
         """
         Initialise Game object
         Each game has a current round number, Player objects and a board object for each round
@@ -26,7 +26,7 @@ class Game(object):
         self.actingOrder = self.generateActingOrder(firstToAct=firstToAct)
         self.actingOrderPointer = 0
         self.roundNumber = 1
-        self.board = Board(playerCount=playerCount, deck=deck)
+        self.board = Board(playerCount=playerCount, deck=deck, deckPosition=deckPosition)
 
         self.player1 = Player(playerNumber=1)
         self.player2 = Player(playerNumber=2)
@@ -76,7 +76,7 @@ class Game(object):
         :return: List actingOrder [first playerNumber, second playerNumber ..]
         """
         assert isinstance(firstToAct, int)
-        assert 1 < firstToAct <= self.playerCount
+        assert 1 <= firstToAct <= self.playerCount
 
         actingOrder = []
         for i in range(firstToAct, self.playerCount + 1):

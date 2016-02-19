@@ -1,5 +1,7 @@
 __author__ = 'Alastair Kerr'
 
+import json
+
 from ofc import OFC
 from pineapple import Pineapple
 
@@ -24,16 +26,18 @@ class GameHandler(object):
             self.game = Pineapple(playerCount=playerCount)
 
         self.gameState = gameState
-        if (self.gameState != {}):
-            self.interpretGameStateJson()
+        if (gameState != {}):
+            self.interpretGameState(gameState)
 
-    def interpretGameStateJson(self):
+    def interpretGameState(self, gameState={}):
         """
-        Interprets the JSON from gameState and updates the game objects with this information
+        Interprets the gameState and updates the game objects with this information
         :return: None
         """
-        pass
+        self.gameState = json.dumps(gameState)
+        print(self.gameState)
 
 if __name__ == "__main__":
     # Testing functionality
-    g = GameHandler(variant='ofc')
+    jsonFile = json.load(open("json_test"))
+    g = GameHandler(variant='ofc', gameState=jsonFile)

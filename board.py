@@ -6,7 +6,7 @@ from card import Card
 
 
 class Board(object):
-    def __init__(self, playerCount=2, deck=None):
+    def __init__(self, playerCount=2, deck=None, deckPosition=0):
         """
         Initialise board object composed of Player objects for each player and a Deck object
         :return: None
@@ -15,7 +15,7 @@ class Board(object):
         assert 2 <= playerCount <= 4
 
         self.playerCount = playerCount
-        self.deck = Deck(deck=deck)
+        self.deck = Deck(deck=deck, currentPosition=deckPosition)
 
         self.player1placements = Placement(playerNumber=1)
         self.player2placements = Placement(playerNumber=2)
