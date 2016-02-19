@@ -1,16 +1,16 @@
 __author__ = 'Alastair Kerr'
 
 class Card(object):
-    def __init__(self, rank='A', suit='H'):
+    def __init__(self, card="AH"):
         """
         Initialise card
         :return: None
         """
-        assert isinstance(rank, basestring)
-        assert rank.upper() in ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A']
-        assert isinstance(suit, basestring)
-        assert suit.upper() in ['H', 'S', 'D', 'C']
+        assert isinstance(card, basestring)
+        assert len(card) == 2
+        assert card[0].upper() in ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A']
+        assert card[1].upper() in ['H', 'S', 'D', 'C']
 
-        self.rank = rank
-        self.suit = suit
-        self.name = rank + suit
+        self.card = card
+        self.rank = card[0]
+        self.suit = card[1]

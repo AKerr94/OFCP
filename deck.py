@@ -6,7 +6,7 @@ from card import Card
 
 
 class Deck (object):
-    def __init__(self, shuffled=True, currentPosition=0):
+    def __init__(self, shuffled=True, currentPosition=0, deck=None):
         """
         Initialise deck object with 52 cards
         :param shuffled: If true, shuffles initialised deck
@@ -16,18 +16,27 @@ class Deck (object):
         assert isinstance(shuffled, bool)
         assert isinstance(currentPosition, int)
 
+        ranks = ['2', '3' ,'4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A']
+        suits = ['H', 'D', 'S', 'C']
         self.deck = []
         self.currentPosition = currentPosition
 
-        ranks = ['2', '3' ,'4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A']
-        suits = ['H', 'D', 'S', 'C']
-        for suit in suits:
-            for rank in ranks:
-                c = Card(rank, suit)
-                self.deck.append(c)
+        if (deck == None):
+            for suit in suits:
+                for rank in ranks:
+                    c = Card(card=rank+suit)
+                    self.deck.append(c)
 
-        if (shuffled):
-            self.deck = self.shuffle(self.deck)
+            if (shuffled):
+                self.deck = self.shuffle(self.deck)
+
+        else:
+            assert isinstance(deck, basestring)
+            assert len(deck) == 104
+            for i in xrange(0, 104, 2):
+                assert deck[i] in ranks
+                assert deck[i + 1] in suits
+                self.deck.append(Card(card=deck[i]+deck[i + 1]))
 
     def shuffle(self, cards):
         """
@@ -61,6 +70,6 @@ class Deck (object):
 
 if __name__ == "__main__":
     # Testing functionality
-    d = Deck()
+    d = Deck(deck="7C9C6C3S5S5D3C8HQHQCAHTSKD5C4H7DACJS7S9SADKS6STH4DQS6D7H8D5H4C8S4SJC3HAS3D8C6H2SKCQDTD9H9DJDKHTC2D2C2HJH")
     for i in range(0,52):
-        print(d.deal_one().name)
+        print(d.deal_one().card)

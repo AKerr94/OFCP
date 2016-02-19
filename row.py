@@ -54,7 +54,7 @@ class Row(object):
         self.pokerHand = ""
         for c in self.cardPlacements:
             assert c != None
-            self.pokerHand += c.name
+            self.pokerHand += c.card
         return self.pokerHand
 
     def scoreRow(self):

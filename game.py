@@ -16,6 +16,7 @@ class Game(object):
         assert 2 <= playerCount <= 4
 
         self.playerCount = playerCount
+        self.firstToAct = firstToAct
         self.nextToAct = firstToAct
         self.actingOrder = self.generateActingOrder(firstToAct=firstToAct)
         self.actingOrderPointer = 0
@@ -53,6 +54,8 @@ class Game(object):
         self.scoreAll()
         self.resetBoard()
         self.roundNumber += 1
+        self.incrementNextToAct()
+        self.actingOrder = self.generateActingOrder(self, self.nextToAct)
 
     def scoreBoard(self):
         """
@@ -119,4 +122,3 @@ if __name__ == "__main__":
         print ""
         for p in g.players:
             print("Player %i's total score after this round = %i" % (p.playerNumber, p.score))
-
