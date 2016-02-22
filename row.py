@@ -91,6 +91,16 @@ class Row(object):
         classification = self.classifyRow()
         return [self.pokerHand, score, classification]
 
+    def humanReadable(self):
+        """
+        Returns the row in a human readable format
+        :return: String row length row size * 2
+        """
+        rowString = ""
+        for card in self.cardPlacements:
+            rowString += card.card
+        return rowString
+
 
 if __name__ == "__main__":
     # Testing functionality - initialise row with 5 random cards and classify this poker hand

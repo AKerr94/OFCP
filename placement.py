@@ -28,9 +28,9 @@ class Placement(object):
         assert row.lower() in ['bottom', 'middle', 'top']
         assert isinstance(cards, list)
         if row.lower() in ['bottom', 'middle']:
-            assert len(row) <= 5
+            assert len(cards) <= 5
         elif row.lower() == 'top':
-            assert len(row) <= 3
+            assert len(cards) <= 3
 
         for i in range(1, len(cards) + 1):
             assert isinstance(cards[i-1], Card)

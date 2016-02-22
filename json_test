@@ -23,15 +23,15 @@
 		"placements": {
 			"1": {
 				"playerNumber": 1,
-				"topRow": "",
-				"middleRow": "",
-				"bottomRow": ""
+				"topRow": "8H8D6D",
+				"middleRow": "KHKD3C3D2H",
+				"bottomRow": "ASACAD9H7C"
 			},
 			"2": {
 				"playerNumber": 2,
-				"topRow": "",
-				"middleRow": "",
-				"bottomRow": ""
+				"topRow": "JCQHTD",
+				"middleRow": "5D5S2D2C3H",
+				"bottomRow": "QSTCJHKHAH"
 			}
 		}
 	}

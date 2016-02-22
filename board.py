@@ -31,7 +31,7 @@ class Board(object):
             if (p != None):
                 self.placements.append(p)
 
-    def setPlacement(self, playerNumber=1, bottomRowCards=[], middleRowCards=[], topRowCards=[]):
+    def setPlacements(self, playerNumber=1, bottomRowCards=[], middleRowCards=[], topRowCards=[]):
         """
         Used to set card placements for given player
         :param playerNumber: int 1-4
@@ -41,7 +41,7 @@ class Board(object):
         :return: None
         """
         assert isinstance(playerNumber, int)
-        assert 1 < playerNumber <= 4
+        assert 1 <= playerNumber <= 4
         for row in [bottomRowCards, middleRowCards, topRowCards]:
             assert isinstance(row, list)
             assert len(row) <= 5
