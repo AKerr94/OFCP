@@ -44,8 +44,8 @@ def classify_5(score_or_hand):
 
 def score_5(hand):
     """
-    Takes in 3 card poker hand and evaluates for high card, pair or three of a kind
-    :param hand: 3 card poker hand as 6 char string: <rank><suit> 3 times
+    Takes in 5 card poker hand and evaluates for high card, pair or three of a kind
+    :param hand: 5 card poker hand as 5 char string: <rank><suit> 5 times
     :return: Poker hand score
     """
     assert isinstance(hand, basestring)
