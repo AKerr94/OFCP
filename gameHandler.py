@@ -20,15 +20,31 @@ class GameHandler(object):
         assert 1 < playerCount <= 4
         assert isinstance(gameState, dict)
 
-        self.game = None
-        if (variant.lower() == 'ofc'):
-            self.game = OFC(playerCount=playerCount)
-        elif (variant.lower() == 'pineapple'):
-            self.game = Pineapple(playerCount=playerCount)
-
+        self.playerCount = playerCount
         self.gameState = gameState
         if (gameState != {}):
+            self.interpretPlayerCount(gameState)
+
+        self.game = None
+        if (variant.lower() == 'ofc'):
+            self.game = OFC(playerCount=self.playerCount)
+        elif (variant.lower() == 'pineapple'):
+            self.game = Pineapple(playerCount=self.playerCount)
+
+        if (gameState != {}):
             self.interpretGameState(gameState)
+
+    def interpretPlayerCount(self, gameState={}):
+        """
+        Reads game state playerNumber to work out how many player objects to initialise the game object with
+        :param gameState: dict game state
+        :return: None
+        """
+        assert isinstance(gameState, dict)
+        assert 'playerCount' in gameState.keys()
+        self.playerCount = gameState['playerCount']
+        assert isinstance(self.playerCount, int)
+        assert 1 < self.playerCount <= 4
 
     def interpretGameState(self, gameState={}):
         """
@@ -72,5 +88,11 @@ if __name__ == "__main__":
     # Testing functionality
     jsonFile = json.load(open("json_test"))
     g = GameHandler(variant='ofc', gameState=jsonFile)
+    pNum = 1
+    # Board object setPlacements method sets placements in an array, index[0] -> player 1, index[1] -> player 2 ...
     for p in g.game.board.placements:
-        print p.bottomRow.humanReadable(), p.middleRow.humanReadable(), p.topRow.humanReadable()
+        print "Player %s: Bottom %s, middle %s, top %s" % \
+              (pNum, p.bottomRow.humanReadable(), p.middleRow.humanReadable(), p.topRow.humanReadable())
+        pNum += 1
+    print "\nNow interpreting scores for this game state...\n"
+    print g.game.interpretScores()

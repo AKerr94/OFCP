@@ -1,16 +1,21 @@
 {
-	"playerCount": 2,
+	"playerCount": 3,
 	"variant": "ofc",
 	"players": {
 		"1": {
 			"playerNumber": 1,
 			"score": 0,
-			"cards": ""
+			"cards": "ASACAD9H7CKHKD3C3D2H8H8D6D"
 		},
 		"2": {
 			"playerNumber": 2,
 			"score": 0,
-			"cards": ""
+			"cards": "QSTCJHKHAH5D5S2D2C3HJCQHTD"
+		},
+		"3": {
+		    "playerNumber": 3,
+		    "score": 0,
+		    "cards": "3S3C4D4H4S5H5D6S6DTS9S9C8H"
 		}
 	},
 	"gameState": {
@@ -32,6 +37,12 @@
 				"topRow": "JCQHTD",
 				"middleRow": "5D5S2D2C3H",
 				"bottomRow": "QSTCJHKHAH"
+			},
+			"3": {
+			    "playerNumber": 3,
+				"topRow": "9S9C8H",
+				"middleRow": "5H5D6S6DTS",
+				"bottomRow": "3S3C4D4H4S"
 			}
 		}
 	}

@@ -69,6 +69,21 @@ class Game(object):
         """
         self.scoring.scoreAll()
 
+    def interpretScores(self):
+        """
+        Calls and interprets results of scorer
+        :return: string scores interpretation
+        """
+        self.scoreBoard()
+        returnStr = ""
+        for message in self.scoring.scoresMessages:
+            returnStr += message + "\n"
+        returnStr += "\n"
+        for player in self.players:
+            returnStr += "Player %i's total score after this round = %i\n" % \
+                         (player.playerNumber, player.score)
+        return returnStr
+
     def generateActingOrder(self, firstToAct=1):
         """
         Generates actingOrder for clockwise rotation of player action
@@ -89,7 +104,8 @@ class Game(object):
 
     def incrementNextToAct(self):
         """
-        Increments nextToAct var - if last player has acted, go back to first player for next round of placements
+        Increments nextToAct var
+        If last player has acted, go back to first player for next round of placements
         :return: None
         """
         if (self.nextToAct == self.actingOrder[self.playerCount - 1]):
@@ -121,9 +137,4 @@ if __name__ == "__main__":
         g = Game(playerCount=4, firstToAct=2)
         print("Order of player action: %s\n" % g.actingOrder)
         g.board.randomlyPopulateBoard()
-        g.scoreBoard()
-        for msg in g.scoring.scoresMessages:
-            print(msg)
-        print ""
-        for p in g.players:
-            print("Player %i's total score after this round = %i" % (p.playerNumber, p.score))
+        print(g.interpretScores())

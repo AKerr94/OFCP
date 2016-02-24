@@ -47,7 +47,6 @@ class Board(object):
             assert len(row) <= 5
             for card in row:
                 assert isinstance(card, Card)
-
         self.placements[playerNumber - 1].setRow(row='Bottom', cards=bottomRowCards)
         self.placements[playerNumber - 1].setRow(row='Middle', cards=middleRowCards)
         self.placements[playerNumber - 1].setRow(row='Top', cards=topRowCards)
