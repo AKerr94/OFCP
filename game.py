@@ -25,6 +25,7 @@ class Game(object):
         self.nextToAct = firstToAct
         self.actingOrder = self.generateActingOrder(firstToAct=firstToAct)
         self.actingOrderPointer = 0
+        self.roundActionNumber = 1
         self.roundNumber = 1
         self.board = Board(playerCount=playerCount, deck=deck, deckPosition=deckPosition)
 
@@ -104,37 +105,92 @@ class Game(object):
 
     def incrementNextToAct(self):
         """
-        Increments nextToAct var
+        Increments nextToAct var and if necessary, the roundActionNumber
         If last player has acted, go back to first player for next round of placements
         :return: None
         """
         if (self.nextToAct == self.actingOrder[self.playerCount - 1]):
             self.actingOrderPointer = 0
             self.nextToAct = self.actingOrder[0]
+            self.roundActionNumber += 1
         else:
             self.actingOrderPointer += 1
             self.nextToAct = self.actingOrder[self.actingOrderPointer]
 
-    def dealFirstHand(self, playerNumber=1):
+    def handleNextAction(self):
+        """
+        Determines which method to call next and for which player
+        If the last action has happened will pass request to scoring handler and return that response instead
+        :return: [int playerNumber, int roundActionNumber, [Card card]]
+        """
+        playerNumber = self.nextToAct
+        cardsDealt = []
+
+        if (self.roundActionNumber == 1):
+            cardsDealt = self.dealFirstHand(playerNumber)
+        elif (self.roundActionNumber <= 9):
+            cardsDealt = self.dealSubsequentRounds(playerNumber)
+        else:
+            raise ValueError("All action for this round has finished!")
+
+        return [playerNumber, self.roundActionNumber, cardsDealt]
+
+    def dealFirstHand(self, playerNumber):
         """
         Deal 5 cards to the given player
         :param playerNumber: int playerNumber
-        :return: 5 card objects
+        :return: [5 card objects]
         """
+        assert self.roundActionNumber == 1
         assert isinstance(playerNumber, int)
-        assert 1 < playerNumber <= self.playerCount
+        assert 1 <= playerNumber <= self.playerCount
 
         if (len(self.players[playerNumber - 1].cards) > 0):
             raise ValueError("Player already has cards dealt!")
         cards = self.board.deck.deal_n(5)
         self.players[playerNumber - 1].cards = cards
+        self.incrementNextToAct()
+
         return cards
+
+    def dealSubsequentRounds(self, playerNumber):
+        """
+        Deal one card to the given player
+        :param playerNumber: int playerNumber
+        :return: [1 card object]
+        """
+        assert self.roundActionNumber > 1
+        assert isinstance(playerNumber, int)
+        assert 1 <= playerNumber <= self.playerCount
+
+        card = self.board.deck.deal_one()
+        self.players[playerNumber - 1].cards.append(card)
+        self.incrementNextToAct()
+
+        return [card]
 
 
 if __name__ == "__main__":
-    # Testing functionality
-    for i in range(0,1):
-        g = Game(playerCount=4, firstToAct=2)
+    # Testing functionality - randomly populating board using game action logic
+    playerCount = 4
+    for gameCount in range(0,1):
+        g = Game(playerCount=playerCount, firstToAct=1)
         print("Order of player action: %s\n" % g.actingOrder)
-        g.board.randomlyPopulateBoard()
+        cardLists = []
+
+        for i in range(0, playerCount):
+            cardLists.append([])
+
+        for i in range(0,9):
+            for j in range(1, playerCount+1):
+                action = g.handleNextAction()
+                player = action[0]
+                cards = action[2]
+                for card in cards:
+                    cardLists[player-1].append(card)
+
+        for i in range(1, playerCount+1):
+            g.board.placements[i-1].setRow(row='Bottom', cards=cardLists[i-1][0:5])
+            g.board.placements[i-1].setRow(row='Middle', cards=cardLists[i-1][5:10])
+            g.board.placements[i-1].setRow(row='Top', cards=cardLists[i-1][10:13])
         print(g.interpretScores())
