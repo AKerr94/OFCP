@@ -4,7 +4,7 @@ import json
 
 from ofc import OFC
 from pineapple import Pineapple
-from card import Card
+import gameHandlerHelpers
 
 
 class GameHandler(object):
@@ -22,6 +22,7 @@ class GameHandler(object):
 
         self.playerCount = playerCount
         self.gameState = gameState
+        firstToAct, nextToAct, actingOrderPointer, roundNumber, roundActionNumber, deck, deckPointer = 1, 1, 0, 1, 1, None, 0
         if (gameState != {}):
             # Game state info overrides existing variables e.g. playerCount
             self.interpretPlayerCount(gameState)
@@ -29,6 +30,7 @@ class GameHandler(object):
                 self.interpretGameVars(gameState['gameState'])
 
         self.game = None
+        # Create a game object for the desired variant using any read in variables
         if (variant.lower() == 'ofc'):
             self.game = OFC(playerCount=self.playerCount, firstToAct=firstToAct, nextToAct=nextToAct, \
                             actingOrderPointer=actingOrderPointer, roundNumber=roundNumber, variant='ofc', \
@@ -39,6 +41,7 @@ class GameHandler(object):
                             roundActionNumber=roundActionNumber, deck=deck, deckPointer=deckPointer)
 
         if (gameState != {}):
+            # Update game state objects with read in information
             self.interpretGameStatePlacements(gameState)
             self.interpretPlayerCards(gameState)
 
@@ -62,7 +65,7 @@ class GameHandler(object):
         """
         assert isinstance(gameState, dict)
         for i in range(1, self.playerCount+1):
-            self.game.players[i-1].cards = self.convertStringToCards(gameState['players'][str(i)]['cards'])
+            self.game.players[i-1].cards = gameHandlerHelpers.convertStringToCards(gameState['players'][str(i)]['cards'])
 
     def interpretGameVars(self, gameState={}):
         """
@@ -99,80 +102,9 @@ class GameHandler(object):
         assert isinstance(key, basestring)
         assert key in ['1', '2', '3', '4']
         self.game.board.setPlacements(playerNumber=int(key), \
-                                   bottomRowCards=self.convertStringToCards(placementsDic[key]['bottomRow']), \
-                                   middleRowCards=self.convertStringToCards(placementsDic[key]['middleRow']), \
-                                   topRowCards=self.convertStringToCards(placementsDic[key]['topRow']))
-
-    def convertStringToCards(self, rowString):
-        """
-        Takes in a row string e.g. "AHADKCKD8S" and converts it into a list of Card objects
-        :param rowString string <rank><suit> * 3 or 5 cards
-        :return: List of Card objects
-        """
-        assert isinstance(rowString, basestring)
-        rowList = []
-        for i in xrange(0, len(rowString), 2):
-            rowList.append(Card(rowString[i:i+2]))
-        return rowList
-
-    def convertCardsToString(self, cards):
-        """
-        Converts a list of cards into their representation as a string
-        :param cards: List of Card objects
-        :return: string cards
-        """
-        assert isinstance(cards, list)
-        cardString = ""
-        for c in cards:
-            assert isinstance(c, Card)
-            cardString += c.card
-        return cardString
-
-    def compileGameState(self, game):
-        """
-        Compiles game state information into dictionary ready to be stored in database
-        :param game: game object to compile dict from
-        :return: dict Game state
-        """
-        gameState = {}
-
-        # Top level game information
-        gameState['playerCount'] = game.playerCount
-        gameState['variant'] = game.variant
-        gameState['players'] = {}
-
-        # Player information
-        for i in range(1, len(game.players)+1):
-            pKey = str(i)
-            gameState['players'][pKey] = {}
-            pGs = gameState['players'][pKey]
-            pGs['playerNumber'] = i
-            pGs['score'] = game.players[i-1].score
-            pGs['cards'] = self.convertCardsToString(game.players[i-1].cards)
-
-        # Game state information
-        gameState['gameState'] = {}
-        gS = gameState['gameState']
-        gS['roundNumber'] = game.roundNumber
-        gS['roundActionNumber'] = game.roundActionNumber
-        gS['firstToAct'] = game.firstToAct
-        gS['nextToAct'] = game.nextToAct
-        gS['actingOrderPointer'] = game.actingOrderPointer
-        gS['deck'] = self.convertCardsToString(game.board.deck.deck)
-        gS['deckPointer'] = game.board.deck.currentPosition
-
-        # Game state placements information
-        gS['placements'] = {}
-        for i in range(1, len(game.players)+1):
-            pKey = str(i)
-            gS['placements'][pKey] = {}
-            pGs = gS['placements'][pKey]
-            pGs['playerNumber'] = i
-            pGs['topRow'] = game.board.placements[i-1].topRow.humanReadable()
-            pGs['middleRow'] = game.board.placements[i-1].middleRow.humanReadable()
-            pGs['bottomRow'] = game.board.placements[i-1].bottomRow.humanReadable()
-
-        return gameState
+                                   bottomRowCards=gameHandlerHelpers.convertStringToCards(placementsDic[key]['bottomRow']), \
+                                   middleRowCards=gameHandlerHelpers.convertStringToCards(placementsDic[key]['middleRow']), \
+                                   topRowCards=gameHandlerHelpers.convertStringToCards(placementsDic[key]['topRow']))
 
 
 if __name__ == "__main__":
@@ -189,4 +121,4 @@ if __name__ == "__main__":
         pNum += 1
     print "\nNow interpreting scores for this game state...\n"
     print g.game.interpretScores()
-    print g.compileGameState(g.game)
+    print gameHandlerHelpers.compileGameState(g.game)
