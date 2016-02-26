@@ -31,15 +31,16 @@ class GameHandler(object):
         self.game = None
         if (variant.lower() == 'ofc'):
             self.game = OFC(playerCount=self.playerCount, firstToAct=firstToAct, nextToAct=nextToAct, \
-                            actingOrderPointer=actingOrderPointer, roundNumber=roundNumber, \
+                            actingOrderPointer=actingOrderPointer, roundNumber=roundNumber, variant='ofc', \
                             roundActionNumber=roundActionNumber, deck=deck, deckPointer=deckPointer)
         elif (variant.lower() == 'pineapple'):
             self.game = Pineapple(playerCount=self.playerCount, firstToAct=firstToAct, nextToAct=nextToAct, \
-                            actingOrderPointer=actingOrderPointer, roundNumber=roundNumber, \
+                            actingOrderPointer=actingOrderPointer, roundNumber=roundNumber, variant='pineapple', \
                             roundActionNumber=roundActionNumber, deck=deck, deckPointer=deckPointer)
 
         if (gameState != {}):
             self.interpretGameStatePlacements(gameState)
+            self.interpretPlayerCards(gameState)
 
     def interpretPlayerCount(self, gameState={}):
         """
@@ -53,9 +54,19 @@ class GameHandler(object):
         assert isinstance(self.playerCount, int)
         assert 1 < self.playerCount <= 4
 
-    def interpretGameVars(self, gameState):
+    def interpretPlayerCards(self, gameState={}):
         """
-        Interprets game and round variables and returns these to initalise game objects with
+        Interprets player cards from game state and updates game objects
+        :param gameState: Game State dict
+        :return: None
+        """
+        assert isinstance(gameState, dict)
+        for i in range(1, self.playerCount+1):
+            self.game.players[i-1].cards = self.convertStringToCards(gameState['players'][str(i)]['cards'])
+
+    def interpretGameVars(self, gameState={}):
+        """
+        Interprets game and round variables and returns these to initialise game objects with
         :param gameState: 'gameState' key:dict
         :return: firstToAct, nextToAct, actingOrderPointer, roundNumber, roundActionNumber, deck, deckPointer
         """
@@ -95,15 +106,73 @@ class GameHandler(object):
     def convertStringToCards(self, rowString):
         """
         Takes in a row string e.g. "AHADKCKD8S" and converts it into a list of Card objects
-        :param rowString String <rank><suit> * 3 or 5 cards
+        :param rowString string <rank><suit> * 3 or 5 cards
         :return: List of Card objects
         """
         assert isinstance(rowString, basestring)
-        assert len(rowString) in [6, 10]
         rowList = []
         for i in xrange(0, len(rowString), 2):
             rowList.append(Card(rowString[i:i+2]))
         return rowList
+
+    def convertCardsToString(self, cards):
+        """
+        Converts a list of cards into their representation as a string
+        :param cards: List of Card objects
+        :return: string cards
+        """
+        assert isinstance(cards, list)
+        cardString = ""
+        for c in cards:
+            assert isinstance(c, Card)
+            cardString += c.card
+        return cardString
+
+    def compileGameState(self, game):
+        """
+        Compiles game state information into dictionary ready to be stored in database
+        :param game: game object to compile dict from
+        :return: dict Game state
+        """
+        gameState = {}
+
+        # Top level game information
+        gameState['playerCount'] = game.playerCount
+        gameState['variant'] = game.variant
+        gameState['players'] = {}
+
+        # Player information
+        for i in range(1, len(game.players)+1):
+            pKey = str(i)
+            gameState['players'][pKey] = {}
+            pGs = gameState['players'][pKey]
+            pGs['playerNumber'] = i
+            pGs['score'] = game.players[i-1].score
+            pGs['cards'] = self.convertCardsToString(game.players[i-1].cards)
+
+        # Game state information
+        gameState['gameState'] = {}
+        gS = gameState['gameState']
+        gS['roundNumber'] = game.roundNumber
+        gS['roundActionNumber'] = game.roundActionNumber
+        gS['firstToAct'] = game.firstToAct
+        gS['nextToAct'] = game.nextToAct
+        gS['actingOrderPointer'] = game.actingOrderPointer
+        gS['deck'] = self.convertCardsToString(game.board.deck.deck)
+        gS['deckPointer'] = game.board.deck.currentPosition
+
+        # Game state placements information
+        gS['placements'] = {}
+        for i in range(1, len(game.players)+1):
+            pKey = str(i)
+            gS['placements'][pKey] = {}
+            pGs = gS['placements'][pKey]
+            pGs['playerNumber'] = i
+            pGs['topRow'] = game.board.placements[i-1].topRow.humanReadable()
+            pGs['middleRow'] = game.board.placements[i-1].middleRow.humanReadable()
+            pGs['bottomRow'] = game.board.placements[i-1].bottomRow.humanReadable()
+
+        return gameState
 
 
 if __name__ == "__main__":
@@ -120,3 +189,4 @@ if __name__ == "__main__":
         pNum += 1
     print "\nNow interpreting scores for this game state...\n"
     print g.game.interpretScores()
+    print g.compileGameState(g.game)

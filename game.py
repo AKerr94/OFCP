@@ -7,7 +7,7 @@ from scorer import Scorer
 
 class Game(object):
     def __init__(self, playerCount=2, firstToAct=1, nextToAct=1, actingOrderPointer=0, \
-                 roundNumber=1, roundActionNumber=1, deck=None, deckPointer=0):
+                 roundNumber=1, roundActionNumber=1, deck=None, deckPointer=0, variant='ofc'):
         """
         Initialise Game object
         Each game has a current round number, Player objects and a board object for each round
@@ -29,6 +29,7 @@ class Game(object):
         self.roundActionNumber = roundActionNumber
         self.roundNumber = roundNumber
         self.roundNumber = roundNumber
+        self.variant = variant
 
         self.board = Board(playerCount=playerCount, deck=deck, deckPointer=deckPointer)
         self.players = self.createPlayers()
