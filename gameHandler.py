@@ -23,16 +23,23 @@ class GameHandler(object):
         self.playerCount = playerCount
         self.gameState = gameState
         if (gameState != {}):
+            # Game state info overrides existing variables e.g. playerCount
             self.interpretPlayerCount(gameState)
+            firstToAct, nextToAct, actingOrderPointer, roundNumber, roundActionNumber, deck, deckPointer = \
+                self.interpretGameVars(gameState['gameState'])
 
         self.game = None
         if (variant.lower() == 'ofc'):
-            self.game = OFC(playerCount=self.playerCount)
+            self.game = OFC(playerCount=self.playerCount, firstToAct=firstToAct, nextToAct=nextToAct, \
+                            actingOrderPointer=actingOrderPointer, roundNumber=roundNumber, \
+                            roundActionNumber=roundActionNumber, deck=deck, deckPointer=deckPointer)
         elif (variant.lower() == 'pineapple'):
-            self.game = Pineapple(playerCount=self.playerCount)
+            self.game = Pineapple(playerCount=self.playerCount, firstToAct=firstToAct, nextToAct=nextToAct, \
+                            actingOrderPointer=actingOrderPointer, roundNumber=roundNumber, \
+                            roundActionNumber=roundActionNumber, deck=deck, deckPointer=deckPointer)
 
         if (gameState != {}):
-            self.interpretGameState(gameState)
+            self.interpretGameStatePlacements(gameState)
 
     def interpretPlayerCount(self, gameState={}):
         """
@@ -46,9 +53,24 @@ class GameHandler(object):
         assert isinstance(self.playerCount, int)
         assert 1 < self.playerCount <= 4
 
-    def interpretGameState(self, gameState={}):
+    def interpretGameVars(self, gameState):
         """
-        Interprets the gameState and updates the game objects with this information
+        Interprets game and round variables and returns these to initalise game objects with
+        :param gameState: 'gameState' key:dict
+        :return: firstToAct, nextToAct, actingOrderPointer, roundNumber, roundActionNumber, deck, deckPointer
+        """
+        firstToAct = gameState['firstToAct']
+        nextToAct = gameState['nextToAct']
+        actingOrderPointer = gameState['actingOrderPointer']
+        roundNumber = gameState['roundNumber']
+        roundActionNumber = gameState['roundActionNumber']
+        deck = gameState['deck']
+        deckPointer = gameState['deckPointer']
+        return firstToAct, nextToAct, actingOrderPointer, roundNumber, roundActionNumber, deck, deckPointer
+
+    def interpretGameStatePlacements(self, gameState={}):
+        """
+        Interprets the gameState placements and updates the game objects with this information
         :return: None
         """
         nestedPlacementsDict = gameState['gameState']['placements']
@@ -91,8 +113,10 @@ if __name__ == "__main__":
     pNum = 1
     # Board object setPlacements method sets placements in an array, index[0] -> player 1, index[1] -> player 2 ...
     for p in g.game.board.placements:
-        print "Player %s: Bottom %s, middle %s, top %s" % \
-              (pNum, p.bottomRow.humanReadable(), p.middleRow.humanReadable(), p.topRow.humanReadable())
+        print "Player %s: Bottom %s (%s), middle %s (%s), top %s (%s)" % \
+              (pNum, p.bottomRow.humanReadable(), p.bottomRow.classifyRow(), \
+               p.middleRow.humanReadable(), p.middleRow.classifyRow(), \
+               p.topRow.humanReadable(), p.topRow.classifyRow() )
         pNum += 1
     print "\nNow interpreting scores for this game state...\n"
     print g.game.interpretScores()

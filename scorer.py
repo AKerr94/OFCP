@@ -10,7 +10,7 @@ class Scorer(object):
     def __init__(self, players=[], board=None):
         """
         Initialise Scorer object with list of Player objects
-        :return:
+        :return: None
         """
         for p in players:
             assert isinstance(p, Player)
@@ -147,14 +147,16 @@ class Scorer(object):
         assert isinstance(player2, Player)
 
         scoopMessage = ""
-        if (player1.scoresList[1][1] > player2.scoresList[1][1] and player1.scoresList[2][1] > player2.scoresList[2][1] \
-            and player1.scoresList[3][1] > player2.scoresList[3][1]):
+        if ( player1.scoresList[1][1] > player2.scoresList[1][1] and \
+             player1.scoresList[2][1] > player2.scoresList[2][1] and \
+             player1.scoresList[3][1] > player2.scoresList[3][1] ):
             player1.score += 3
             player2.score -= 3
             scoopMessage = " and scooped for +3 points!"
 
-        elif (player2.scoresList[1][1] > player1.scoresList[1][1] and player2.scoresList[2][1] > player1.scoresList[2][1] \
-            and player2.scoresList[3][1] > player1.scoresList[3][1]):
+        elif ( player2.scoresList[1][1] > player1.scoresList[1][1] and \
+               player2.scoresList[2][1] > player1.scoresList[2][1] and \
+               player2.scoresList[3][1] > player1.scoresList[3][1] ):
             player1.score -= 3
             player2.score += 3
             scoopMessage = " and scooped for +3 points!"
@@ -199,22 +201,23 @@ class Scorer(object):
             return 0
 
         if (rowName == 'Bottom'):
-            mappings = {5: 2, 6: 4, 7: 6, 8: 10, 9: 15}
+            royaltyMappings = {5: 2, 6: 4, 7: 6, 8: 10, 9: 15}
             # Special case for royal flush
             if (score[0] == 9 and score[1] == 14):
                 return 25
             try:
-                royalty = mappings[score[0]]
+                royalty = royaltyMappings[score[0]]
                 return royalty
             except:
                 return 0
 
         elif (rowName == 'Middle'):
-            mappings = {4: 2, 5: 4, 6: 8, 7: 12, 8: 20, 9: 30}
+            royaltyMappings = {4: 2, 5: 4, 6: 8, 7: 12, 8: 20, 9: 30}
+            # Special case for royal flush
             if (score[0] == 9 and score[1] == 14):
                 return 50
             try:
-                royalty = mappings[score[0]]
+                royalty = royaltyMappings[score[0]]
                 return royalty
             except:
                 return 0

@@ -6,7 +6,8 @@ from scorer import Scorer
 
 
 class Game(object):
-    def __init__(self, playerCount=2, firstToAct=1, deck=None, deckPosition=0):
+    def __init__(self, playerCount=2, firstToAct=1, nextToAct=1, actingOrderPointer=0, \
+                 roundNumber=1, roundActionNumber=1, deck=None, deckPointer=0):
         """
         Initialise Game object
         Each game has a current round number, Player objects and a board object for each round
@@ -22,28 +23,38 @@ class Game(object):
 
         self.playerCount = playerCount
         self.firstToAct = firstToAct
-        self.nextToAct = firstToAct
+        self.nextToAct = nextToAct
         self.actingOrder = self.generateActingOrder(firstToAct=firstToAct)
-        self.actingOrderPointer = 0
-        self.roundActionNumber = 1
-        self.roundNumber = 1
-        self.board = Board(playerCount=playerCount, deck=deck, deckPosition=deckPosition)
+        self.actingOrderPointer = actingOrderPointer
+        self.roundActionNumber = roundActionNumber
+        self.roundNumber = roundNumber
+        self.roundNumber = roundNumber
 
-        self.player1 = Player(playerNumber=1)
-        self.player2 = Player(playerNumber=2)
-        self.player3 = None
-        self.player4 = None
-        if self.playerCount >= 3:
-            self.player3 = Player(playerNumber=3)
-        if self.playerCount == 4:
-            self.player4 = Player(playerNumber=4)
-
-        self.players = []
-        for p in [self.player1, self.player2, self.player3, self.player4]:
-            if (p != None):
-                self.players.append(p)
+        self.board = Board(playerCount=playerCount, deck=deck, deckPointer=deckPointer)
+        self.players = self.createPlayers()
 
         self.scoring = Scorer(players=self.players, board=self.board)
+
+    def createPlayers(self):
+        """
+        Used to initialise the player objects based on given player requirements
+        :return: List of player objects in ascending numerical order
+        """
+        player1 = Player(playerNumber=1)
+        player2 = Player(playerNumber=2)
+        player3 = None
+        player4 = None
+        if self.playerCount >= 3:
+            player3 = Player(playerNumber=3)
+        if self.playerCount == 4:
+            player4 = Player(playerNumber=4)
+
+        players = []
+        for p in [player1, player2, player3, player4]:
+            if (p != None):
+                players.append(p)
+
+        return players
 
     def resetBoard(self):
         """
