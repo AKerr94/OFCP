@@ -17,19 +17,28 @@ class Board(object):
         self.playerCount = playerCount
         self.deck = Deck(deck=deck, currentPosition=deckPointer)
 
-        self.player1placements = Placement(playerNumber=1)
-        self.player2placements = Placement(playerNumber=2)
-        self.player3placements = None
-        self.player4placements = None
-        if (playerCount >= 3):
-            self.player3placements = Placement(playerNumber=3)
-        if (playerCount == 4):
-            self.player4placements = Placement(playerNumber=4)
+        self.placements = self.initPlacements()
 
-        self.placements = []
-        for p in [self.player1placements, self.player2placements, self.player3placements, self.player4placements]:
+    def initPlacements(self):
+        """
+        Initialises the placement objects for this board (1 for each player)
+        :return: List of placement objects
+        """
+        player1placements = Placement(playerNumber=1)
+        player2placements = Placement(playerNumber=2)
+        player3placements = None
+        player4placements = None
+        if (self.playerCount >= 3):
+            player3placements = Placement(playerNumber=3)
+        if (self.playerCount == 4):
+            player4placements = Placement(playerNumber=4)
+
+        placements = []
+        for p in [player1placements, player2placements, player3placements, player4placements]:
             if (p != None):
-                self.placements.append(p)
+                placements.append(p)
+
+        return placements
 
     def setPlacements(self, playerNumber=1, bottomRowCards=[], middleRowCards=[], topRowCards=[]):
         """
