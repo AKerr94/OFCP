@@ -33,6 +33,7 @@ class Database(object):
                              user=self.USER,
                              passwd=self.PASS,
                              db=self.DB)
+        db.autocommit(True)
 
         cur = db.cursor()
         cur.execute(query)
