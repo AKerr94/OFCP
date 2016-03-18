@@ -98,7 +98,8 @@ class Row(object):
         """
         rowString = ""
         for card in self.cardPlacements:
-            rowString += card.card
+            if (card != None):
+                rowString += card.card
         return rowString
 
 

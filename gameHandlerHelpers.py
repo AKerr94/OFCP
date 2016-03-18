@@ -1,3 +1,5 @@
+__author__ = 'Alastair Kerr'
+
 from card import Card
 
 

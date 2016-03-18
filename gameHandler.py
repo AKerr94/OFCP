@@ -106,6 +106,20 @@ class GameHandler(object):
                                    middleRowCards=gameHandlerHelpers.convertStringToCards(placementsDic[key]['middleRow']), \
                                    topRowCards=gameHandlerHelpers.convertStringToCards(placementsDic[key]['topRow']))
 
+    def getCompiledGameState(self):
+        """
+        Returns the compile JSON game state for the game object associated with this handler instance
+        :return: Game state JSON
+        """
+        return gameHandlerHelpers.compileGameState(self.game)
+
+    def getNextActionDetails(self):
+        """
+        Calls game object to determine next action
+        :return: [Player number, round action number, cards to place]
+        """
+        return self.game.handleNextAction()
+
 
 if __name__ == "__main__":
     # Testing functionality
@@ -121,4 +135,4 @@ if __name__ == "__main__":
         pNum += 1
     print "\nNow interpreting scores for this game state...\n"
     print g.game.interpretScores()
-    print gameHandlerHelpers.compileGameState(g.game)
+    print g.getCompiledGameState()
