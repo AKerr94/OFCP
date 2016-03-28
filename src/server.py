@@ -36,6 +36,7 @@ class api(object):
 
         # Create database entry here with game state and game id
         game_state = gameHandler.getCompiledGameState()
+        # TODO database entry for this game state
 
         raise cherrypy.HTTPRedirect("/render_game/%s" % game_id)
 
@@ -48,9 +49,9 @@ class api(object):
         if (game_id == None):
             raise cherrypy.HTTPError(500, "No game id was provided for this request!")
 
-        # Query database
+        # TODO Query database
 
-        # render template and return
+        # TODO render template and return
 
     def ofc_backend(self, **params):
         """
@@ -66,7 +67,7 @@ class api(object):
             f.write("%s: ofc_backend failed to interpret request: %s\n" % (datetime.now(), params))
             raise cherrypy.HTTPError(500, "Invalid request! See error logs for dump.")
 
-        # Generate response
+        # TODO Generate response
 
 
     make_game.exposed = True

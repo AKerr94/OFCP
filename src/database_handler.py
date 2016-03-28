@@ -24,7 +24,7 @@ class Database(object):
         """
         Sanitises query then connects to database and executes given query
         :param query: string SQL query
-        :return: None
+        :return: Result of query
         """
         query = self.sanitise_query(query)
 
@@ -37,8 +37,10 @@ class Database(object):
 
         cur = db.cursor()
         cur.execute(query)
+        result = cur.fetchall()
 
         db.close()
+        return result
 
     def sanitise_query(self, query):
         """
@@ -47,3 +49,8 @@ class Database(object):
         :return: Sanitised query
         """
         return MySQLdb.escape_string(query)
+
+if __name__ == "__main__":
+    # Testing database queries
+    db = Database()
+    print db.execute_query("""INSERT INTO games (game_id, game_state) VALUES ("asfasf-2325-fsaafa", "{'1':'x'}");""")
