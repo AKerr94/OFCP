@@ -72,10 +72,14 @@ class Database(object):
         # TODO search for game_id / update if exits
         query = "SELECT * FROM games WHERE game_id = %s"
         query = self.build_query(query, game_id)
-        if (self.execute_query()):
+        result = self.execute_query()
+        print result
+        if (result):
             query = "UPDATE games SET game_state = \"%s\" WHERE game_id = %s"
             query = self.build_query(query, (game_state, game_id))
-            print self.execute_query(query)
+            result = self.execute_query(query)
+            print result
+            return result
 
         # Game not found - create new entry
         query = "INSERT INTO games (game_id, game_state) VALUES (%s, %s);"
