@@ -4,6 +4,7 @@ import MySQLdb
 from datetime import datetime
 
 import config
+import tools
 
 
 class Database(object):
@@ -40,9 +41,9 @@ class Database(object):
             result = cur.fetchall()
         except Exception, e:
             db.close()
-            error = "%s: %s" % (datetime.now(), e)
+            error = "%s: %s" % (tools.get_formatted_datetime(), e)
             with open('%s/error_logs' % config.LOGS_DIR, 'a') as f:
-                f.write("%s: There was an error executing an SQL query!\n" % datetime.now())
+                f.write("%s: There was an error executing an SQL query!\n" % tools.get_formatted_datetime())
                 f.write(error)
             return error
 

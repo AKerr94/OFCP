@@ -6,6 +6,7 @@ import uuid
 from datetime import datetime
 
 import config
+import tools
 from gameHandler import GameHandler
 from database_handler import Database
 
@@ -66,7 +67,7 @@ class api(object):
             game_id = params['game_id']
         except:
             with open('%s/error_logs' % config.LOGS_DIR, 'a') as f:
-                f.write("%s: ofc_backend failed to interpret request: %s\n" % (datetime.now().rstrip(7), params))
+                f.write("%s: ofc_backend failed to interpret request: %s\n" % (tools.get_formatted_datetime(), params))
             raise cherrypy.HTTPError(500, "Invalid request! See error logs for dump.")
 
         # TODO Generate response
