@@ -69,7 +69,6 @@ class Database(object):
         :param game_state: dictionary with game state information
         :return: Result of query
         """
-        # TODO search for game_id / update if exits
         query = "SELECT * FROM games WHERE game_id = %s"
         query = self.build_query(query, game_id)
         result = self.execute_query(query)
