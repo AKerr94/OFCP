@@ -40,9 +40,10 @@ class Database(object):
             result = cur.fetchall()
         except Exception, e:
             db.close()
-            # TODO db error logger
-            error = "%s: %s" % (datetime.now, e)
-            print error
+            error = "%s: %s" % (datetime.now(), e)
+            with open('%s/error_logs' % config.LOGS_DIR, 'a') as f:
+                f.write("%s: There was an error executing an SQL query!" % datetime.now())
+                f.write(error)
             return error
 
         db.close()
