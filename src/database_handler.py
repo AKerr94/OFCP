@@ -42,7 +42,7 @@ class Database(object):
             db.close()
             error = "%s: %s" % (datetime.now(), e)
             with open('%s/error_logs' % config.LOGS_DIR, 'a') as f:
-                f.write("%s: There was an error executing an SQL query!" % datetime.now())
+                f.write("%s: There was an error executing an SQL query!\n" % datetime.now())
                 f.write(error)
             return error
 
