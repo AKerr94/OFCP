@@ -22,12 +22,10 @@ class Database(object):
 
     def execute_query(self, query):
         """
-        Sanitises query then connects to database and executes given query
+        Connects to database and executes given query
         :param query: string SQL query
         :return: Result of query
         """
-        query = self.sanitise_query(query)
-
         db = MySQLdb.connect(host=self.HOST,
                              port=self.PORT,
                              user=self.USER,
@@ -42,15 +40,38 @@ class Database(object):
         db.close()
         return result
 
-    def sanitise_query(self, query):
+    def build_query(self, query, *params):
         """
-        Sanitises query to prevent SQL injection
-        :param query: String SQL query
-        :return: Sanitised query
+        Perform basic sanitisation to avoid SQL injection and build full query
+        :param query: Query with %s for any params
+        :param params: List of values to insert into query
+        :return: String query
         """
-        return MySQLdb.escape_string(query)
+        for param in params:
+            assert ';' not in param
+        final = query % (params)
+        return final
+
+    def update_game_state(self, game_id, game_state):
+        """
+        Update database entry for a given game - create new row if this doesn't already exist
+        :param game_id: uuid for this game
+        :param game_state: dictionary with game state information
+        :return: Result of query
+        """
+        # TODO search for game_id / update if exits
+
+        # Game not found - create new entry
+        query = "INSERT INTO games (game_id, game_state) VALUES (%s, %s);"
+        query = self.build_query(query, game_id, game_state)
+
+        result = self.execute_query(query)
+
+        return result
 
 if __name__ == "__main__":
     # Testing database queries
     db = Database()
-    print db.execute_query("""INSERT INTO games (game_id, game_state) VALUES ("asfasf-2325-fsaafa", "{'1':'x'}");""")
+    params = ("\"asfasf-2325-fsaafa\"", "\"{'1':'x'}\"")
+    query = db.build_query("INSERT INTO games (game_id, game_state) VALUES (%s, %s);", params[0], params[1])
+    print db.execute_query(query)

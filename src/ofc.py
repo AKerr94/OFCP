@@ -7,7 +7,7 @@ class OFC(Game):
     """
     Original OFC variant of the game
     """
-    pass
+    pass # Uses default game logic from Game class
 
 
 if __name__ == "__main__":

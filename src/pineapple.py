@@ -20,6 +20,8 @@ class Pineapple(Game):
                             actingOrderPointer=actingOrderPointer, roundNumber=roundNumber, variant='pineapple', \
                             roundActionNumber=roundActionNumber, deck=deck, deckPointer=deckPointer)
 
+    # TODO pineapple ofc specific game logic functions/ implementation
+
 
 if __name__ == "__main__":
     # Testing functionality
