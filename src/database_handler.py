@@ -44,7 +44,7 @@ class Database(object):
             error = "%s: %s" % (tools.get_formatted_datetime(), e)
             with open('%s/error_logs' % config.LOGS_DIR, 'a') as f:
                 f.write("%s: There was an error executing an SQL query!\n" % tools.get_formatted_datetime())
-                f.write(error)
+                f.write(error + "\n")
             return error
 
         db.close()
@@ -70,6 +70,12 @@ class Database(object):
         :return: Result of query
         """
         # TODO search for game_id / update if exits
+        query = "SELECT * FROM games WHERE game_id = %s"
+        query = self.build_query(query, game_id)
+        if (self.execute_query()):
+            query = "UPDATE games SET game_state = \"%s\" WHERE game_id = %s"
+            query = self.build_query(query, (game_state, game_id))
+            print self.execute_query(query)
 
         # Game not found - create new entry
         query = "INSERT INTO games (game_id, game_state) VALUES (%s, %s);"
