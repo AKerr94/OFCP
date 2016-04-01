@@ -1,6 +1,7 @@
 __author__ = "Alastair Kerr"
 
 import MySQLdb
+from datetime import datetime
 
 import config
 
@@ -34,8 +35,15 @@ class Database(object):
         db.autocommit(True)
 
         cur = db.cursor()
-        cur.execute(query)
-        result = cur.fetchall()
+        try:
+            cur.execute(query)
+            result = cur.fetchall()
+        except Exception, e:
+            db.close()
+            # TODO db error logger
+            error = "%s: %s" % (datetime.now, e)
+            print error
+            return error
 
         db.close()
         return result

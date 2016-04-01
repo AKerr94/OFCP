@@ -36,10 +36,9 @@ class api(object):
 
         # Create database entry here with game state and game id
         game_state = gameHandler.getCompiledGameState()
-        db_result = self.db.update_game_state(game_id, game_state)
-        print db_result
-        # TODO write this to db logger
-
+        db_result = self.db.update_game_state("\"%s\"" % str(game_id), "\"%s\"" % str(game_state))
+        if db_result:
+            raise cherrypy.HTTPError(500, "Database error! See error logs for dump.")
 
         raise cherrypy.HTTPRedirect("/render_game/%s" % game_id)
 
