@@ -1,7 +1,6 @@
 __author__ = "Alastair Kerr"
 
 import MySQLdb
-from datetime import datetime
 
 import config
 import tools
@@ -94,8 +93,8 @@ class Database(object):
             return result
 
         # Game not found - create new entry
-        query = "INSERT INTO games (game_id, game_state) VALUES (%s, %s);"
-        query = self.build_query(query, "\"%s\"" % game_id, "\"%s\"" % game_state)
+        query = "INSERT INTO games (game_id, game_state) VALUES (\"%s\", \"%s\");"
+        query = self.build_query(query, game_id, game_state)
 
         result = self.execute_query(query)
 
