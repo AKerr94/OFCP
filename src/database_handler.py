@@ -88,16 +88,11 @@ class Database(object):
         if (gameExists):
             query = "UPDATE games SET game_state = \"%s\" WHERE game_id = \"%s\""
             query = self.build_query(query, game_state, game_id)
-            result = self.execute_query(query)
-            print result
-            return result
-
-        # Game not found - create new entry
-        query = "INSERT INTO games (game_id, game_state) VALUES (\"%s\", \"%s\");"
-        query = self.build_query(query, game_id, game_state)
+        else:
+            query = "INSERT INTO games (game_id, game_state) VALUES (\"%s\", \"%s\");"
+            query = self.build_query(query, game_id, game_state)
 
         result = self.execute_query(query)
-
         return result
 
 if __name__ == "__main__":
