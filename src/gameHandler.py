@@ -22,7 +22,10 @@ class GameHandler(object):
 
         self.playerCount = playerCount
         self.gameState = gameState
+
+        # Set defaults - overridden if gameState is passed
         firstToAct, nextToAct, actingOrderPointer, roundNumber, roundActionNumber, deck, deckPointer = 1, 1, 0, 1, 1, None, 0
+
         if (gameState != {}):
             # Game state info overrides existing variables e.g. playerCount
             self.interpretPlayerCount(gameState)
@@ -35,6 +38,7 @@ class GameHandler(object):
             self.game = OFC(playerCount=self.playerCount, firstToAct=firstToAct, nextToAct=nextToAct, \
                             actingOrderPointer=actingOrderPointer, roundNumber=roundNumber, variant='ofc', \
                             roundActionNumber=roundActionNumber, deck=deck, deckPointer=deckPointer)
+
         elif (variant.lower() == 'pineapple'):
             self.game = Pineapple(playerCount=self.playerCount, firstToAct=firstToAct, nextToAct=nextToAct, \
                             actingOrderPointer=actingOrderPointer, roundNumber=roundNumber, variant='pineapple', \
@@ -80,6 +84,7 @@ class GameHandler(object):
         roundActionNumber = gameState['roundActionNumber']
         deck = gameState['deck']
         deckPointer = gameState['deckPointer']
+
         return firstToAct, nextToAct, actingOrderPointer, roundNumber, roundActionNumber, deck, deckPointer
 
     def interpretGameStatePlacements(self, gameState={}):
@@ -101,6 +106,7 @@ class GameHandler(object):
         assert isinstance(placementsDic, dict)
         assert isinstance(key, basestring)
         assert key in ['1', '2', '3', '4']
+
         self.game.board.setPlacements(playerNumber=int(key), \
                                    bottomRowCards=gameHandlerHelpers.convertStringToCards(placementsDic[key]['bottomRow']), \
                                    middleRowCards=gameHandlerHelpers.convertStringToCards(placementsDic[key]['middleRow']), \

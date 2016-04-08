@@ -3,12 +3,14 @@ __author__ = 'Alastair Kerr'
 import cherrypy
 import json
 import uuid
-from datetime import datetime
+from jinja2 import Environment, FileSystemLoader
 
 import config
 import tools
 from gameHandler import GameHandler
 from database_handler import Database
+
+env = Environment(loader=FileSystemLoader('templates'))
 
 
 class api(object):
@@ -56,6 +58,8 @@ class api(object):
         game_state = self.db.query_by_game_id(game_id, 'game_state')[0][0]
 
         # TODO render template and return
+        template = env.get_template('index.html')
+        return template.render(salutation='testing', target='123')
 
     def ofc_backend(self, **params):
         """
