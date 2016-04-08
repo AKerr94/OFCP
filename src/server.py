@@ -53,7 +53,7 @@ class api(object):
         if (game_id == None):
             raise cherrypy.HTTPError(500, "No game id was provided for this request!")
 
-        game_state = self.db.query_by_game_id(game_id, 'game_state')
+        game_state = self.db.query_by_game_id(game_id, 'game_state')[0][0]
         print game_state
 
         # TODO render template and return

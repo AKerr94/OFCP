@@ -95,7 +95,7 @@ class Database(object):
 
         # Game not found - create new entry
         query = "INSERT INTO games (game_id, game_state) VALUES (%s, %s);"
-        query = self.build_query(query, game_id, "\"%s\"" % game_state)
+        query = self.build_query(query, "\"%s\"" % game_id, "\"%s\"" % game_state)
 
         result = self.execute_query(query)
 
