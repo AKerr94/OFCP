@@ -73,7 +73,7 @@ class Database(object):
         if not column:
             column = '*'
 
-        query = self.build_query("SELECT %s FROM games WHERE game_id = %s", column, game_id)
+        query = self.build_query("SELECT %s FROM games WHERE game_id = \"%s\"", column, game_id)
         result = self.execute_query(query)
 
         return result
@@ -88,7 +88,7 @@ class Database(object):
         gameExists = self.query_by_game_id(game_id)
 
         if (gameExists):
-            query = "UPDATE games SET game_state = \"%s\" WHERE game_id = %s"
+            query = "UPDATE games SET game_state = \"%s\" WHERE game_id = \"%s\""
             query = self.build_query(query, game_state, game_id)
             result = self.execute_query(query)
             print result
