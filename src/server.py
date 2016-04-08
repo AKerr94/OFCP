@@ -39,6 +39,7 @@ class api(object):
         game_state = gameHandler.getCompiledGameState()
         db_result = self.db.update_game_state(str(game_id), str(game_state))
         if db_result:
+            tools.write_error(db_result)
             raise cherrypy.HTTPError(500, "Database error! See error logs for dump.")
 
         raise cherrypy.HTTPRedirect("/render_game/%s" % game_id)
@@ -67,8 +68,7 @@ class api(object):
             game_state = json.loads(params['game_state'])
             game_id = params['game_id']
         except:
-            with open('%s/error_logs' % config.LOGS_DIR, 'a') as f:
-                f.write("%s: ofc_backend failed to interpret request: %s\n" % (tools.get_formatted_datetime(), params))
+            tools.write_error("ofc_backend failed to interpret request: %s\n" % params)
             raise cherrypy.HTTPError(500, "Invalid request! See error logs for dump.")
 
         # TODO Generate response

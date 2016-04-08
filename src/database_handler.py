@@ -42,9 +42,8 @@ class Database(object):
         except Exception, e:
             db.close()
             error = "%s: %s" % (tools.get_formatted_datetime(), e)
-            with open('%s/error_logs' % config.LOGS_DIR, 'a') as f:
-                f.write("%s: There was an error executing an SQL query!\n" % tools.get_formatted_datetime())
-                f.write(error + "\n")
+            tools.write_error("There was an error executing an SQL query!")
+            tools.write_error(error + "\n")
             return error
 
         db.close()
