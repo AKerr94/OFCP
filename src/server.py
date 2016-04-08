@@ -57,9 +57,7 @@ class api(object):
 
         game_state = self.db.query_by_game_id(game_id, 'game_state')[0][0]
 
-        # TODO render template and return
-        template = env.get_template('index.html')
-        return template.render(salutation='testing', target='123')
+        return render_template('game.html', game_id=game_id, game_state=game_state)
 
     def ofc_backend(self, **params):
         """
@@ -81,6 +79,16 @@ class api(object):
     render_game.exposed = True
     ofc_backend.exposed = True
 
+
+def render_template(template, **kwargs):
+    """
+    Returns HTML rendered from template with passed args
+    :param template: Filename in templates/
+    :param kwargs: Variables used in template
+    :return: Rendered template
+    """
+    t = env.get_template(template)
+    return t.render(**kwargs)
 
 if __name__ == "__main__":
     cherrypy.quickstart(api(), '/', config.cherrypy_config)
