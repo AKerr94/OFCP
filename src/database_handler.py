@@ -62,6 +62,22 @@ class Database(object):
         final = query % (params)
         return final
 
+    def query_by_game_id(self, game_id, column=None):
+        """
+        Query database entry for a given game_id
+        Specify a column (e.g. game_state) or defaults to pulling entire row
+        :param game_id: uuid4
+        :param column: Column name or empty for *
+        :return: Result of query
+        """
+        if not column:
+            column = '*'
+
+        query = self.build_query("SELECT %s FROM games WHERE game_id = %s", column, game_id)
+        result = self.execute_query(query)
+
+        return result
+
     def update_game_state(self, game_id, game_state):
         """
         Update database entry for a given game - create new row if this doesn't already exist
@@ -69,10 +85,9 @@ class Database(object):
         :param game_state: dictionary with game state information
         :return: Result of query
         """
-        query = "SELECT * FROM games WHERE game_id = %s"
-        query = self.build_query(query, game_id)
-        result = self.execute_query(query)
-        if (result):
+        gameExists = self.query_by_game_id(game_id)
+
+        if (gameExists):
             query = "UPDATE games SET game_state = \"%s\" WHERE game_id = %s"
             query = self.build_query(query, game_state, game_id)
             result = self.execute_query(query)
