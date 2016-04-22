@@ -76,6 +76,19 @@ class Database(object):
 
         return result
 
+    def get_sanitised_game_state(self, game_id):
+        """
+        Returns a sanitised game state for the frontend removing information such as the cards in the deck
+        :param game_id: str uuid4
+        :return: Game state
+        """
+        game_state = self.query_by_game_id(game_id, 'game_state')[0][0]
+        try:
+            del game_state['gameState']['deck']
+        except:
+            pass
+        return game_state
+
     def update_game_state(self, game_id, game_state):
         """
         Update database entry for a given game - create new row if this doesn't already exist

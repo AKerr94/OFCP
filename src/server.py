@@ -37,7 +37,7 @@ class api(object):
         game_id = uuid.uuid4()
         gameHandler = GameHandler(variant=variant, playerCount=playerCount)
 
-        # Create database entry here with game state and game id
+        # Create database entry with game state and game id
         game_state = gameHandler.getCompiledGameState()
         db_result = self.db.update_game_state(str(game_id), str(game_state))
         if db_result:
@@ -55,7 +55,7 @@ class api(object):
         if (game_id == None):
             raise cherrypy.HTTPError(500, "No game id was provided for this request!")
 
-        game_state = self.db.query_by_game_id(game_id, 'game_state')[0][0]
+        game_state = self.db.get_sanitised_game_state(game_id)
 
         return render_template('game.html', game_id=game_id, game_state=game_state)
 
