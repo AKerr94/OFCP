@@ -61,19 +61,27 @@ class api(object):
 
     def ofc_backend(self, **params):
         """
-        Handles interaction between frontend and backend - interprets game state information from POSTed JSON with game id
-        :param params: Expected: game_id, game_state
+        Handles interaction between frontend and backend - interprets request in form of JSON from POST
+        :param params: Expected: game_id, payload (details of request for backend)
         :return: Next action information (e.g. player number + cards to place)
         """
         try:
-            game_state = json.loads(params['game_state'])
+            payload = json.loads(params['payload'])
+            assert 'action' in payload.keys()
             game_id = params['game_id']
+            game_state = self.db.get_game_state(game_id)
         except:
             tools.write_error("ofc_backend failed to interpret request: %s\n" % params)
             raise cherrypy.HTTPError(500, "Invalid request! See error logs for dump.")
 
-        # TODO Generate response
+        game = GameHandler(variant=game_state['variant'], playerCount=game_state['playerCount'], gameState=game_state)
+        if payload['action'] == 'nextAction':
+            response = game.getNextActionDetails()
+        else:
+            tools.write_error("ofc_backend invalid payload action: '%s' with payload: '%s'\n" % (payload['action'], payload))
+            raise cherrypy.HTTPError(500, "Invalid request! See error logs for dump.")
 
+        return response
 
     make_game.exposed = True
     render_game.exposed = True
