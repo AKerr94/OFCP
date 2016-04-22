@@ -11,7 +11,8 @@ def convertCardsListToObj(cards):
     """
     card_objs = []
     for card in cards:
-        card_objs.append(Card(card))
+        if card != None:
+            card_objs.append(Card(card))
     return card_objs
 
 def convertCardsListToStr(cards):
@@ -22,7 +23,8 @@ def convertCardsListToStr(cards):
     """
     card_strs = []
     for card in cards:
-        card_strs.append(card.card)
+        if card != None:
+            card_strs.append(card.card)
     return card_strs
 
 def compileGameState(game):
