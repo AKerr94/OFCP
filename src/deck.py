@@ -31,12 +31,15 @@ class Deck (object):
                 self.deck = self.shuffle(self.deck)
 
         else:
-            assert isinstance(deck, basestring)
-            assert len(deck) == 104
-            for i in xrange(0, 104, 2):
-                assert deck[i] in ranks
-                assert deck[i + 1] in suits
-                self.deck.append(Card(card=deck[i]+deck[i + 1]))
+            assert isinstance(deck, list)
+            assert len(deck) == 52
+            for card in deck:
+                if type(card) == Card:
+                    self.deck.append(card)
+                else:
+                    assert isinstance(card, basestring)
+                    assert len(card) == 2
+                    self.deck.append(Card(card))
 
     def shuffle(self, cards):
         """

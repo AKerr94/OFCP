@@ -5,17 +5,17 @@
 		"1": {
 			"playerNumber": 1,
 			"score": 0,
-			"cards": "ASACAD9H7CKHKD3C3D2H8H8D6D"
+			"cards": ["AS", "AC", "AD", "9H", "7C", "KH", "KD", "3C", "3D", "2H", "8H", "8D", "6D"]
 		},
 		"2": {
 			"playerNumber": 2,
 			"score": 0,
-			"cards": "QSTCJHKHAH5D5S2D2C3HJCQHTD"
+			"cards": ["QS", "TC", "JH", "KH", "AH", "5D", "5S", "2D", "2C", "3H", "JC", "QH", "TD"]
 		},
 		"3": {
 		    "playerNumber": 3,
 		    "score": 0,
-		    "cards": "3S3C4D4H4S5H5D6S6DTS9S9C8H"
+		    "cards": ["3S", "3C", "4D", "4H", "4S", "5H", "5D", "6S", "6D", "TS", "9S", "9C", "8H"]
 		}
 	},
 	"gameState": {
@@ -24,26 +24,26 @@
 		"firstToAct": 1,
 		"nextToAct": 2,
 		"actingOrderPointer": 1,
-		"deck": "2H2D2S2C3H3D3S3C4H4D4S4C5H5D5S5C6H6D6S6C7H7D7S7C8H8D8S8C9H9D9S9CTHTDTSTCJHJDJSJCQHQDQSQCKHKDKSKCAHADASAC",
+		"deck": ["2H", "2D", "2S", "2C", "3H", "3D", "3S", "3C", "4H", "4D", "4S", "4C", "5H", "5D", "5S", "5C", "6H","6D","6S", "6C", "7H", "7D", "7S", "7C", "8H", "8D", "8S", "8C", "9H", "9D", "9S", "9C", "TH", "TD", "TS", "TC", "JH", "JD", "JS", "JC", "QH", "QD", "QS", "QC", "KH", "KD", "KS", "KC", "AH", "AD", "AS", "AC"],
 		"deckPointer": 0,
 		"placements": {
 			"1": {
 				"playerNumber": 1,
-				"topRow": "8H8D6D",
-				"middleRow": "KHKD3C3D2H",
-				"bottomRow": "ASACAD9H7C"
+				"topRow": ["8H", "8D", "6D"],
+				"middleRow": ["KH", "KD", "3C", "3D", "2H"],
+				"bottomRow": ["AS", "AC", "AD", "9H", "7C"]
 			},
 			"2": {
 				"playerNumber": 2,
-				"topRow": "JCQHTD",
-				"middleRow": "5D5S2D2C3H",
-				"bottomRow": "QSTCJHKHAH"
+				"topRow": ["JC", "QH", "TD"],
+				"middleRow": ["5D", "5S", "2D", "2C", "3H"],
+				"bottomRow": ["QS", "TC", "JH", "KH", "AH"]
 			},
 			"3": {
 			    "playerNumber": 3,
-				"topRow": "9S9C8H",
-				"middleRow": "5H5D6S6DTS",
-				"bottomRow": "3S3C4D4H4S"
+				"topRow": ["9S", "9C", "8H"],
+				"middleRow": ["5H", "5D", "6S", "6D", "TS"],
+				"bottomRow": ["3S", "3C", "4D", "4H", "4S"]
 			}
 		}
 	}

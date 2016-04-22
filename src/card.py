@@ -11,6 +11,6 @@ class Card(object):
         assert card[0].upper() in ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A']
         assert card[1].upper() in ['H', 'S', 'D', 'C']
 
-        self.card = card
-        self.rank = card[0]
-        self.suit = card[1]
+        self.card = str(card)
+        self.rank = str(card[0])
+        self.suit = str(card[1])

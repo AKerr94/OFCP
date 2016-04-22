@@ -69,7 +69,7 @@ class GameHandler(object):
         """
         assert isinstance(gameState, dict)
         for i in range(1, self.playerCount+1):
-            self.game.players[i-1].cards = gameHandlerHelpers.convertStringToCards(gameState['players'][str(i)]['cards'])
+            self.game.players[i-1].cards = gameHandlerHelpers.convertCardsListToObj(gameState['players'][str(i)]['cards'])
 
     def interpretGameVars(self, gameState={}):
         """
@@ -108,9 +108,9 @@ class GameHandler(object):
         assert key in ['1', '2', '3', '4']
 
         self.game.board.setPlacements(playerNumber=int(key), \
-                                   bottomRowCards=gameHandlerHelpers.convertStringToCards(placementsDic[key]['bottomRow']), \
-                                   middleRowCards=gameHandlerHelpers.convertStringToCards(placementsDic[key]['middleRow']), \
-                                   topRowCards=gameHandlerHelpers.convertStringToCards(placementsDic[key]['topRow']))
+                                   bottomRowCards=gameHandlerHelpers.convertCardsListToObj(placementsDic[key]['bottomRow']), \
+                                   middleRowCards=gameHandlerHelpers.convertCardsListToObj(placementsDic[key]['middleRow']), \
+                                   topRowCards=gameHandlerHelpers.convertCardsListToObj(placementsDic[key]['topRow']))
 
     def getCompiledGameState(self):
         """
