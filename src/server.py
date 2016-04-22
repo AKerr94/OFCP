@@ -55,7 +55,7 @@ class api(object):
         if (game_id == None):
             raise cherrypy.HTTPError(500, "No game id was provided for this request!")
 
-        game_state = self.db.get_sanitised_game_state(game_id)
+        game_state = self.db.get_game_state(game_id, sanitised=True)
 
         return render_template('game.html', game_id=game_id, game_state=game_state)
 

@@ -76,17 +76,20 @@ class Database(object):
 
         return result
 
-    def get_sanitised_game_state(self, game_id):
+    def get_game_state(self, game_id, sanitised=False):
         """
-        Returns a sanitised game state for the frontend removing information such as the cards in the deck
+        Returns dictionary representation of the game state for the given game_id
+        Set sanitised to True to get sanitised game_state for the frontend removing information such as the cards in the deck
         :param game_id: str uuid4
         :return: Game state
         """
-        game_state = self.query_by_game_id(game_id, 'game_state')[0][0]
-        try:
-            del game_state['gameState']['deck']
-        except:
-            pass
+        game_state_string = self.query_by_game_id(game_id, 'game_state')[0][0]
+        game_state = tools.load_dictionary_from_string(game_state_string)
+        if sanitised:
+            try:
+                del game_state['gameState']['deck']
+            except:
+                pass
         return game_state
 
     def update_game_state(self, game_id, game_state):

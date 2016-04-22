@@ -1,6 +1,7 @@
 __author__ = "Alastair Kerr"
 
 from datetime import datetime
+import ast
 
 import config
 
@@ -20,3 +21,11 @@ def write_error(message):
     """
     with open('%s/error_logs' % config.LOGS_DIR, 'a') as f:
         f.write("%s: %s\n" % (get_formatted_datetime(), message))
+
+def load_dictionary_from_string(obj):
+    """
+    Evaluate a string representation of a dictionary
+    :param obj: String representation of a dictionary
+    :return: Dictionary
+    """
+    return ast.literal_eval(obj)
