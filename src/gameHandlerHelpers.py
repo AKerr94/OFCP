@@ -3,31 +3,6 @@ __author__ = 'Alastair Kerr'
 from card import Card
 
 
-def convertStringToCards(rowString):
-    """
-    Takes in a row string e.g. "AHADKCKD8S" and converts it into a list of Card objects
-    :param rowString string <rank><suit> * 3 or 5 cards
-    :return: List of Card objects
-    """
-    assert isinstance(rowString, basestring)
-    rowList = []
-    for i in xrange(0, len(rowString), 2):
-        rowList.append(Card(rowString[i:i+2]))
-    return rowList
-
-def convertCardsToString(cards):
-    """
-    Converts a list of cards into their representation as a string
-    :param cards: List of Card objects
-    :return: string cards
-    """
-    assert isinstance(cards, list)
-    cardString = ""
-    for c in cards:
-        assert isinstance(c, Card)
-        cardString += c.card
-    return cardString
-
 def convertCardsListToObj(cards):
     """
     Take a list of card strings and return a list of card objects
