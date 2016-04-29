@@ -143,16 +143,16 @@ class GameHandler(object):
         :param game_state: New game state
         :return: None
         """
-        self.game.roundNumber = game_state['gameState']['roundNumber']
-        self.game.roundActionNumber = game_state['gameState']['roundActionNumber']
-        self.game.firstToAct = game_state['gameState']['firstToAct']
-        self.game.nextToAct = game_state['gameState']['nextToAct']
-        self.game.actingOrderPointer = game_state['gameState']['actingOrderPointer']
-        self.game.board.deck.currentPosition = game_state['gameState']['deckPointer']
+        self.game.roundNumber = int(game_state['gameState']['roundNumber'])
+        self.game.roundActionNumber = int(game_state['gameState']['roundActionNumber'])
+        self.game.firstToAct = int(game_state['gameState']['firstToAct'])
+        self.game.nextToAct = int(game_state['gameState']['nextToAct'])
+        self.game.actingOrderPointer = int(game_state['gameState']['actingOrderPointer'])
+        self.game.board.deck.currentPosition = int(game_state['gameState']['deckPointer'])
 
         for playerNumber in game_state['players'].keys():
             self.game.players[playerNumber-1].cards = gameHandlerHelpers.convertCardsListToObj(game_state['players'][playerNumber]['cards'])
-            self.game.players[playerNumber-1].score = game_state['players'][playerNumber]['score']
+            self.game.players[playerNumber-1].score = int(game_state['players'][playerNumber]['score'])
 
         for playerNumber in game_state['placements'].keys():
             self.game.board.placements[playerNumber-1].bottomRow.cardPlacements = \
