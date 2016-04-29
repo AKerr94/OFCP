@@ -59,6 +59,7 @@ class api(object):
 
         return render_template('game.html', game_id=game_id, game_state=game_state)
 
+    @cherrypy.tools.json_out()
     def ofc_backend(self, **params):
         """
         Handles interaction between frontend and backend - interprets request in form of JSON from POST
