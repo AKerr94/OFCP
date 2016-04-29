@@ -93,10 +93,18 @@ class api(object):
             raise cherrypy.HTTPError(500, "Invalid request! See error logs for dump.")
 
         gameHandler = GameHandler(variant=game_state['variant'], playerCount=game_state['playerCount'], gameState=game_state)
+
         if payload['action'] == 'nextAction':
             response = gameHandler.getNextActionDetails()
+        elif payload['action'] == 'updateGameState':
+            assert 'game_state' in params.keys()
+            valid = gameHandler.validateNewPlacements(params['game_state'])
+            if not valid:
+                tools.write_error("Invalid new game state for game id '%s': %s" % (game_id, str(params['game_state'])))
+                raise cherrypy.HTTPError(500, "Invalid new game state for game id %s" % game_id)
+            response = gameHandler.updateGameState(params['game_state'])
         else:
-            tools.write_error("ofc_backend invalid payload action: '%s' with payload: '%s'\n" % (payload['action'], payload))
+            tools.write_error("ofc_backend invalid payload action: '%s' with payload: '%s'" % (payload['action'], payload))
             raise cherrypy.HTTPError(500, "Invalid request! See error logs for dump.")
 
         self.updateDatabase(gameHandler.getCompiledGameState(), game_id)

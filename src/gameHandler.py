@@ -128,6 +128,42 @@ class GameHandler(object):
         payload[2] = gameHandlerHelpers.convertCardsListToStr(payload[2])
         return gameHandlerHelpers.formatNextActionResponse(payload)
 
+    def validateNewPlacements(self, game_state):
+        """
+        Validates new game state against current game state to ensure legitimate moves were made
+        :param game_state: New game state
+        :return: True/ False
+        """
+        # TODO
+        return True
+
+    def updateGameState(self, game_state):
+        """
+        Updates this object's game state with new values from param game_state
+        :param game_state: New game state
+        :return: None
+        """
+        self.game.roundNumber = game_state['gameState']['roundNumber']
+        self.game.roundActionNumber = game_state['gameState']['roundActionNumber']
+        self.game.firstToAct = game_state['gameState']['firstToAct']
+        self.game.nextToAct = game_state['gameState']['nextToAct']
+        self.game.actingOrderPointer = game_state['gameState']['actingOrderPointer']
+        self.game.board.deck.currentPosition = game_state['gameState']['deckPointer']
+
+        for playerNumber in game_state['players'].keys():
+            self.game.players[playerNumber-1].cards = gameHandlerHelpers.convertCardsListToObj(game_state['players'][playerNumber]['cards'])
+            self.game.players[playerNumber-1].score = game_state['players'][playerNumber]['score']
+
+        for playerNumber in game_state['placements'].keys():
+            self.game.board.placements[playerNumber-1].bottomRow.cardPlacements = \
+                gameHandlerHelpers.convertCardsListToObj(game_state['placements'][playerNumber]['bottomRow'])
+            self.game.board.placements[playerNumber-1].middleRow.cardPlacements = \
+                gameHandlerHelpers.convertCardsListToObj(game_state['placements'][playerNumber]['middleRow'])
+            self.game.board.placements[playerNumber-1].topRow.cardPlacements = \
+                gameHandlerHelpers.convertCardsListToObj(game_state['placements'][playerNumber]['topRow'])
+
+        return "Successfully updated game state!"
+
 
 if __name__ == "__main__":
     # Testing functionality

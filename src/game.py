@@ -29,7 +29,6 @@ class Game(object):
         self.actingOrderPointer = actingOrderPointer
         self.roundActionNumber = roundActionNumber
         self.roundNumber = roundNumber
-        self.roundNumber = roundNumber
         self.variant = variant
 
         self.board = Board(playerCount=playerCount, deck=deck, deckPointer=deckPointer)
