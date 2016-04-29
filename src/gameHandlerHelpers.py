@@ -27,6 +27,17 @@ def convertCardsListToStr(cards):
             card_strs.append(card.card)
     return card_strs
 
+def formatNextActionResponse(response):
+    """
+    Format response in dictionary to return as JSON
+    :param response: [Player number, round action number, [cards to place]]
+    :return: Dictionary
+    """
+    playerNumber = response[0]
+    roundActionNumber = response[1]
+    cards = response[2]
+    return {'playerNumber': playerNumber, 'roundActionNumber': roundActionNumber, 'cards': cards}
+
 def compileGameState(game):
     """
     Compiles game state information into dictionary ready to be stored in database

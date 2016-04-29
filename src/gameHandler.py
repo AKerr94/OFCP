@@ -122,9 +122,11 @@ class GameHandler(object):
     def getNextActionDetails(self):
         """
         Calls game object to determine next action
-        :return: [Player number, round action number, cards to place]
+        :return: [Player number, round action number, [cards to place]]
         """
-        return self.game.handleNextAction()
+        payload = self.game.handleNextAction()
+        payload[2] = gameHandlerHelpers.convertCardsListToStr(payload[2])
+        return gameHandlerHelpers.formatNextActionResponse(payload)
 
 
 if __name__ == "__main__":
