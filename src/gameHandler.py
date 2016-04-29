@@ -151,15 +151,15 @@ class GameHandler(object):
         self.game.board.deck.currentPosition = int(game_state['gameState']['deckPointer'])
 
         for playerNumber in game_state['players'].keys():
-            self.game.players[playerNumber-1].cards = gameHandlerHelpers.convertCardsListToObj(game_state['players'][playerNumber]['cards'])
-            self.game.players[playerNumber-1].score = int(game_state['players'][playerNumber]['score'])
+            self.game.players[int(playerNumber)-1].cards = gameHandlerHelpers.convertCardsListToObj(game_state['players'][playerNumber]['cards'])
+            self.game.players[int(playerNumber)-1].score = int(game_state['players'][playerNumber]['score'])
 
         for playerNumber in game_state['placements'].keys():
-            self.game.board.placements[playerNumber-1].bottomRow.cardPlacements = \
+            self.game.board.placements[int(playerNumber)-1].bottomRow.cardPlacements = \
                 gameHandlerHelpers.convertCardsListToObj(game_state['placements'][playerNumber]['bottomRow'])
-            self.game.board.placements[playerNumber-1].middleRow.cardPlacements = \
+            self.game.board.placements[int(playerNumber)-1].middleRow.cardPlacements = \
                 gameHandlerHelpers.convertCardsListToObj(game_state['placements'][playerNumber]['middleRow'])
-            self.game.board.placements[playerNumber-1].topRow.cardPlacements = \
+            self.game.board.placements[int(playerNumber)-1].topRow.cardPlacements = \
                 gameHandlerHelpers.convertCardsListToObj(game_state['placements'][playerNumber]['topRow'])
 
         return "Successfully updated game state!"
