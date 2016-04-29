@@ -154,13 +154,13 @@ class GameHandler(object):
             self.game.players[int(playerNumber)-1].cards = gameHandlerHelpers.convertCardsListToObj(game_state['players'][playerNumber]['cards'])
             self.game.players[int(playerNumber)-1].score = int(game_state['players'][playerNumber]['score'])
 
-        for playerNumber in game_state['placements'].keys():
+        for playerNumber in game_state['gameState']['placements'].keys():
             self.game.board.placements[int(playerNumber)-1].bottomRow.cardPlacements = \
-                gameHandlerHelpers.convertCardsListToObj(game_state['placements'][playerNumber]['bottomRow'])
+                gameHandlerHelpers.convertCardsListToObj(game_state['gameState']['placements'][playerNumber]['bottomRow'])
             self.game.board.placements[int(playerNumber)-1].middleRow.cardPlacements = \
-                gameHandlerHelpers.convertCardsListToObj(game_state['placements'][playerNumber]['middleRow'])
+                gameHandlerHelpers.convertCardsListToObj(game_state['gameState']['placements'][playerNumber]['middleRow'])
             self.game.board.placements[int(playerNumber)-1].topRow.cardPlacements = \
-                gameHandlerHelpers.convertCardsListToObj(game_state['placements'][playerNumber]['topRow'])
+                gameHandlerHelpers.convertCardsListToObj(game_state['gameState']['placements'][playerNumber]['topRow'])
 
         return "Successfully updated game state!"
 
