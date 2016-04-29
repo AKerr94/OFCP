@@ -98,11 +98,12 @@ class api(object):
             response = gameHandler.getNextActionDetails()
         elif payload['action'] == 'updateGameState':
             assert 'game_state' in params.keys()
-            valid = gameHandler.validateNewPlacements(params['game_state'])
+            new_game_state = tools.load_dictionary_from_string(params['game_state'])
+            valid = gameHandler.validateNewPlacements(new_game_state)
             if not valid:
                 tools.write_error("Invalid new game state for game id '%s': %s" % (game_id, str(params['game_state'])))
                 raise cherrypy.HTTPError(500, "Invalid new game state for game id %s" % game_id)
-            response = gameHandler.updateGameState(params['game_state'])
+            response = gameHandler.updateGameState(new_game_state)
         else:
             tools.write_error("ofc_backend invalid payload action: '%s' with payload: '%s'" % (payload['action'], payload))
             raise cherrypy.HTTPError(500, "Invalid request! See error logs for dump.")
