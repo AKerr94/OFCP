@@ -16,12 +16,25 @@ env = Environment(loader=FileSystemLoader('templates'))
 class api(object):
     """
     Application layer handling requests from frontend and responses from backend
+    Communicates with database handler to update and retrieve game state information
     """
     def __init__(self):
         """
         Initialise required objects
         """
         self.db = Database()
+
+    def updateDatabase(self, game_state, game_id):
+        """
+        Updates database entry for given game id (or creates new entry if none exists)
+        :param game_state: Game state to update entry with
+        :param game_id: uuid4 for game
+        :return: None
+        """
+        db_result = self.db.update_game_state(str(game_id), str(game_state))
+        if db_result:
+            tools.write_error(db_result)
+            raise cherrypy.HTTPError(500, "Database error! See error logs for dump.")
 
     def make_game(self, playerCount=2, variant='ofc'):
         """
@@ -39,10 +52,7 @@ class api(object):
 
         # Create database entry with game state and game id
         game_state = gameHandler.getCompiledGameState()
-        db_result = self.db.update_game_state(str(game_id), str(game_state))
-        if db_result:
-            tools.write_error(db_result)
-            raise cherrypy.HTTPError(500, "Database error! See error logs for dump.")
+        self.updateDatabase(game_state, game_id)
 
         raise cherrypy.HTTPRedirect("/render_game/%s" % game_id)
 
@@ -75,13 +85,14 @@ class api(object):
             tools.write_error("ofc_backend failed to interpret request: %s\n" % params)
             raise cherrypy.HTTPError(500, "Invalid request! See error logs for dump.")
 
-        game = GameHandler(variant=game_state['variant'], playerCount=game_state['playerCount'], gameState=game_state)
+        gameHandler = GameHandler(variant=game_state['variant'], playerCount=game_state['playerCount'], gameState=game_state)
         if payload['action'] == 'nextAction':
-            response = game.getNextActionDetails()
+            response = gameHandler.getNextActionDetails()
         else:
             tools.write_error("ofc_backend invalid payload action: '%s' with payload: '%s'\n" % (payload['action'], payload))
             raise cherrypy.HTTPError(500, "Invalid request! See error logs for dump.")
 
+        self.updateDatabase(gameHandler.getCompiledGameState(), game_id)
         return response
 
     make_game.exposed = True
