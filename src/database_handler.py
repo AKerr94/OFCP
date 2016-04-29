@@ -85,11 +85,9 @@ class Database(object):
         """
         game_state_string = self.query_by_game_id(game_id, 'game_state')[0][0]
         game_state = tools.load_dictionary_from_string(game_state_string)
-        if sanitised:
-            try:
-                del game_state['gameState']['deck']
-            except:
-                pass
+        if sanitised and 'deck' in game_state['gameState'].keys():
+            del game_state['gameState']['deck']
+
         return game_state
 
     def update_game_state(self, game_id, game_state):

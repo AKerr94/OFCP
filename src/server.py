@@ -88,7 +88,8 @@ class api(object):
             game_id = params['game_id']
             game_state = self.db.get_game_state(game_id)
         except Exception, e:
-            tools.write_error("Error %s. ofc_backend failed to interpret request: %s\n" % (e, params))
+            tools.write_error("Error: %s" % e)
+            tools.write_error("ofc_backend failed to interpret request: %s" % params)
             raise cherrypy.HTTPError(500, "Invalid request! See error logs for dump.")
 
         gameHandler = GameHandler(variant=game_state['variant'], playerCount=game_state['playerCount'], gameState=game_state)

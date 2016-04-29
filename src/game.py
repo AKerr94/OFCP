@@ -3,6 +3,7 @@ __author__ = 'Alastair Kerr'
 from player import Player
 from board import Board
 from scorer import Scorer
+import tools
 
 
 class Game(object):
@@ -143,6 +144,7 @@ class Game(object):
         elif (self.roundActionNumber <= 9):
             cardsDealt = self.dealSubsequentRounds(playerNumber)
         else:
+            tools.write_error("handleNextAction(): All action for this round has finished!")
             raise ValueError("All action for this round has finished!")
 
         return [playerNumber, self.roundActionNumber, cardsDealt]
