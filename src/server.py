@@ -64,8 +64,14 @@ class api(object):
         """
         if (game_id == None):
             raise cherrypy.HTTPError(500, "No game id was provided for this request!")
+        else:
+            game_id = str(game_id)
 
-        game_state = self.db.get_game_state(game_id, sanitised=True)
+        try:
+            game_state = self.db.get_game_state(game_id, sanitised=True)
+        except:
+            tools.write_error("Unable to load game state for game id: %s" % game_id)
+            raise cherrypy.HTTPError(500, "Failed to load entry for game id '%s' from database!" % game_id)
 
         return render_template('game.html', game_id=game_id, game_state=game_state)
 
@@ -81,8 +87,8 @@ class api(object):
             assert 'action' in payload.keys()
             game_id = params['game_id']
             game_state = self.db.get_game_state(game_id)
-        except:
-            tools.write_error("ofc_backend failed to interpret request: %s\n" % params)
+        except Exception, e:
+            tools.write_error("Error %s. ofc_backend failed to interpret request: %s\n" % (e, params))
             raise cherrypy.HTTPError(500, "Invalid request! See error logs for dump.")
 
         gameHandler = GameHandler(variant=game_state['variant'], playerCount=game_state['playerCount'], gameState=game_state)
