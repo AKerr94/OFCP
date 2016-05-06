@@ -128,13 +128,70 @@ class GameHandler(object):
         payload[2] = gameHandlerHelpers.convertCardsListToStr(payload[2])
         return gameHandlerHelpers.formatNextActionResponse(payload)
 
-    def validateNewPlacements(self, game_state):
+    def rowPlacementsAreIdentical(self, new_game_state, playerNumber, rowName):
+        """
+        Determines if the placements for a given row are the same in a given game state compared to that of the game state from the previous action
+        Used as a supplementary function called by playerGameStateIsIdentical
+        :param new_game_state: Dictionary game state
+        :param playerNumber: Int/ str player number
+        :param rowName: Str bottom, middle or top
+        :return: True - Placements are identical, False - inconsistent placements
+        """
+        assert 0 < int(playerNumber) <= self.playerCount
+        playerNumber = str(playerNumber)
+        rowName = rowName.lower()
+        assert rowName in ['bottom', 'middle', 'top']
+
+        row = "%sRow" % rowName
+        oldPlacement = self.gameState['gameState']['placements'][playerNumber][row]
+        newPlacement = new_game_state['gameState']['placements'][playerNumber][row]
+
+        if oldPlacement != newPlacement:
+            return False
+        return True
+
+    def playerGameStateIsIdentical(self, new_game_state, playerNumber):
+        """
+        Determines if the game state information for the given player is identical in the new game state to the game state from the previous action
+        Used to validate that no other changes were made, except for those by the player whose turn it was to act
+        :param new_game_state: Dictionary game state
+        :param playerNumber: Int/ str player number
+        :return: True - no erroneous changes, False - inconsistent game states
+        """
+        assert 0 < int(playerNumber) <= self.playerCount
+        playerNumber = str(playerNumber)
+
+        playerScoreOld = self.gameState['players'][playerNumber]['score']
+        playerScoreNew = new_game_state['players'][playerNumber]['score']
+        if playerScoreOld != playerScoreNew:
+            return False
+
+        playerCardsOld = self.gameState['players'][playerNumber]['cards']
+        playerCardsNew = new_game_state['players'][playerNumber]['cards']
+        if playerCardsOld != playerCardsNew:
+            return False
+
+        for row in ['bottom', 'middle', 'top']:
+            if self.rowPlacementsAreIdentical(new_game_state, playerNumber, row) != True:
+                return False
+
+        return True
+
+    def validateNewPlacements(self, new_game_state):
         """
         Validates new game state against current game state to ensure legitimate moves were made
+        Validate that no other agents game state information has changed except the agent whose turn it was to act
+        Validate that changes to the agent whose turn it was to act were legitimate
         :param game_state: New game state
         :return: True/ False
         """
-        # TODO
+        lastActor = self.game.getLastActor()
+        for playerNumber in [x for x in self.game.actingOrder if x != lastActor]:
+            if self.playerGameStateIsIdentical(new_game_state, playerNumber) != True:
+                return False
+
+        # TODO validate last actor's changes are legitimate
+
         return True
 
     def updateGameState(self, game_state):

@@ -69,11 +69,11 @@ class Game(object):
         Start a new round
         :return: None
         """
-        self.scoreAll()
+        self.scoreBoard()
         self.resetBoard()
         self.roundNumber += 1
         self.incrementNextToAct()
-        self.actingOrder = self.generateActingOrder(self, self.nextToAct)
+        self.actingOrder = self.generateActingOrder(self.nextToAct)
 
     def scoreBoard(self):
         """
@@ -121,13 +121,23 @@ class Game(object):
         If last player has acted, go back to first player for next round of placements
         :return: None
         """
-        if (self.nextToAct == self.actingOrder[self.playerCount - 1]):
+        if self.nextToAct == self.actingOrder[self.playerCount - 1]:
             self.actingOrderPointer = 0
             self.nextToAct = self.actingOrder[0]
             self.roundActionNumber += 1
         else:
             self.actingOrderPointer += 1
             self.nextToAct = self.actingOrder[self.actingOrderPointer]
+
+    def getLastActor(self):
+        """
+        Returns the player number for the agent who acted last
+        :return: int player number
+        """
+        if self.actingOrderPointer > 0:
+            return self.actingOrder[self.actingOrderPointer - 1]
+        else:
+            return self.actingOrder[self.playerCount - 1]
 
     def handleNextAction(self):
         """
