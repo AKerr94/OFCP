@@ -1,6 +1,28 @@
-<h1>{{ game_id }} </h1>
-<h2>{{ game_state }}</h2>
+<!DOCTYPE html>
+<html>
 
-<img src="../static/cards/{{ game_state['players']['1']['cards'][0] }}.png" alt="card">
-<img src="../static/cards/{{ game_state['players']['1']['cards'][1] }}.png" alt="card">
-<img src="../static/cards/{{ game_state['players']['1']['cards'][2] }}.png" alt="card">
+<head>
+	<meta charset="utf-8"/>
+	<title>Open Face Chinese Poker game {{game_id}}</title>
+	<link href="../static/game.css" rel="stylesheet">
+</head>
+
+<body>
+
+<h1>Open Face Chinese Poker</h1>
+
+<div>
+{% for i in range(1, game_state['playerCount'] + 1) %}
+	<h2>Player {{i}}</h2>
+	<div style="border: 1px solid #000000; width: 109px; height: 150px;">
+	{% set c = game_state['gameState']['placements'][i|string]['bottomRow'][0] %}
+	{% if c is not none and c|length > 0 %}
+		<img src="../static/cards/{{c}}.png" name={{c}} style="display: block;">
+	{% endif %}
+	</div>
+{% endfor %}
+</div>
+
+</body>
+
+</html>
