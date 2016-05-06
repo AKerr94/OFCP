@@ -1,0 +1,12 @@
+.placement
+{
+	border: 1px solid #000000; 
+	width: 109px; 
+	height: 150px; 
+	display: inline-block;
+}
+
+.card
+{
+	display: block;
+}
