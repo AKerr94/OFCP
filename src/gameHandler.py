@@ -185,7 +185,7 @@ class GameHandler(object):
         :param game_state: New game state
         :return: True/ False
         """
-        lastActor = self.game.getLastActor()
+        lastActor = self.game.actingOrder[self.game.actingOrderPointer]
         for playerNumber in [x for x in self.game.actingOrder if x != lastActor]:
             if self.playerGameStateIsIdentical(new_game_state, playerNumber) != True:
                 return False
