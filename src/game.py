@@ -52,7 +52,7 @@ class Game(object):
 
         players = []
         for p in [player1, player2, player3, player4]:
-            if (p != None):
+            if p != None:
                 players.append(p)
 
         return players

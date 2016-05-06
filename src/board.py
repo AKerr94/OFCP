@@ -83,7 +83,7 @@ class Board(object):
 if __name__ == '__main__':
     # Testing functionality
     b = Board(playerCount=3)
-    testRow = b.player3placements.middleRow
+    testRow = b.placements[2].middleRow
     cards = b.deck.deal_n(5)
     for i in range(0,5):
         testRow.setPlacement(c=cards[i], position=i+1)

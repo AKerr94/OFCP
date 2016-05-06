@@ -24,8 +24,19 @@ def write_error(message):
 
 def load_dictionary_from_string(obj):
     """
-    Evaluate a string representation of a dictionary
+    Used to evaluate a string representation of a dictionary
     :param obj: String representation of a dictionary
     :return: Dictionary
     """
     return ast.literal_eval(obj)
+
+
+def render_template(template, env, **kwargs):
+    """
+    Returns HTML rendered from template with passed args
+    :param template: Filename in templates/
+    :param kwargs: Variables used in template
+    :return: Rendered template
+    """
+    t = env.get_template(template)
+    return t.render(**kwargs)

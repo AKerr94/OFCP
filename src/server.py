@@ -13,7 +13,7 @@ from database_handler import Database
 env = Environment(loader=FileSystemLoader('templates'))
 
 
-class api(object):
+class Api(object):
     """
     Application layer handling requests from frontend and responses from backend
     Communicates with database handler to update and retrieve game state information
@@ -64,8 +64,7 @@ class api(object):
         """
         if (game_id == None):
             raise cherrypy.HTTPError(500, "No game id was provided for this request!")
-        else:
-            game_id = str(game_id)
+        game_id = str(game_id)
 
         try:
             game_state = self.db.get_game_state(game_id, sanitised=True)
@@ -73,7 +72,7 @@ class api(object):
             tools.write_error("Unable to load game state for game id: %s" % game_id)
             raise cherrypy.HTTPError(500, "Failed to load entry for game id '%s' from database!" % game_id)
 
-        return render_template('game.html', game_id=game_id, game_state=game_state)
+        return tools.render_template(template='game.html', env=env, game_id=game_id, game_state=game_state)
 
     @cherrypy.tools.json_out()
     def ofc_backend(self, **params):
@@ -116,15 +115,5 @@ class api(object):
     ofc_backend.exposed = True
 
 
-def render_template(template, **kwargs):
-    """
-    Returns HTML rendered from template with passed args
-    :param template: Filename in templates/
-    :param kwargs: Variables used in template
-    :return: Rendered template
-    """
-    t = env.get_template(template)
-    return t.render(**kwargs)
-
 if __name__ == "__main__":
-    cherrypy.quickstart(api(), '/', config.cherrypy_config)
+    cherrypy.quickstart(Api(), '/', config.cherrypy_config)
