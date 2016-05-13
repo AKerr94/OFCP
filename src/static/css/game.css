@@ -10,3 +10,18 @@
 {
 	display: block;
 }
+
+.p_left
+{
+	float: left;
+}
+
+.p_right
+{
+	float: right;
+}
+
+.clear
+{
+	clear: both;
+}

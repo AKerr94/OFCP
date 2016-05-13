@@ -42,6 +42,7 @@ class Api(object):
         :return: None, redirect to game page
         """
         assert variant in ['ofc', 'pineapple']
+        playerCount = int(playerCount)
         maxPlayers = 4
         if variant == 'pineapple':
             maxPlayers = 3
