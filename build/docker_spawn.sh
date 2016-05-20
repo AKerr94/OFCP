@@ -9,4 +9,4 @@ else
     echo "Building new image for ofc-sql container"
     ( cd mysql && docker build --no-cache -t ofc-sql-image . )
 fi
-docker run -it -d --name ofc-sql-test -p 3306:3306 ofc-sql-image /bin/bash
+docker run -it -d --name ofc-sql -p 3306:3306 ofc-sql-image

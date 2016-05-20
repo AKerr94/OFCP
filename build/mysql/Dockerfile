@@ -7,4 +7,4 @@ RUN apt-get -q -y install mysql-server
 ADD files/* /tmp/
 RUN /tmp/initialise_db.sh
 
-ENTRYPOINT service mysql start
+CMD service mysql start && tail -F /var/log/mysql/error.log
