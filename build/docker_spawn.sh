@@ -53,11 +53,13 @@ esac
 shift
 done
 
-echo -e "${YELLOW}Force rebuild: ${FORCE}\nSpawning OFC infrastructure..${NC}"
+echo -e "${YELLOW}Force rebuild: ${FORCE}${NC}"
 
 if [ "${FORCE}" = true ]; then
     teardown
 fi
+
+echo -e "${YELLOW}Spawning OFC infrastructure..${NC}"
 
 docker images | grep -q ${OFC_DATA_IMG}
 if [ $? -eq 0 ]; then
@@ -75,7 +77,7 @@ else
     echo -e "${YELLOW}Building new image for ofc-sql container${NC}"
     ( cd mysql && docker build --no-cache -t ${OFC_SQL_IMG} . )
 fi
-docker run --volumes-from ${OFC_DATA_VOL} -dit --name ${OFC_SQL} -p 3306:3306 ${OFC_SQL_IMG}
+docker run --privileged --volumes-from ${OFC_DATA_VOL} -dit --name ${OFC_SQL} -p 3306:3306 ${OFC_SQL_IMG}
 
 docker images | grep -q ${OFC_SVC_IMG}
 if [ $? -eq 0 ]; then
