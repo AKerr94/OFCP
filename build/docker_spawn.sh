@@ -22,7 +22,13 @@ OFC_SQL_IMG="ofc-sql-image"
 OFC_DATA_IMG="ofc-sql-data-image"
 
 function usage {
-    echo -e "${YELLOW}Usage: -f (force rebuild) -h (help)${NC}"
+    echo -e "${YELLOW}Usage: -f (force rebuild) -t (teardown only) -h (help)${NC}"
+}
+
+function teardown {
+    echo -e "${YELLOW}Tearing down existing images/ containers..${NC}"
+    docker rm -f ${OFC_SVC} ${OFC_SQL} ${OFC_DATA_VOL}
+    docker rmi -f ${OFC_SVC_IMG} ${OFC_SQL_IMG} ${OFC_DATA_IMG} 
 }
 
 while [[ $# > 0 ]]
@@ -37,6 +43,10 @@ case $flag in
     usage && exit 0
     shift
     ;;
+    -t|--teardown)
+    teardown && exit 0
+    shift
+    ;;
     *)
     echo -e "${RED}Unknown flag `echo $flag | tr -d '-'`${NC}" && usage && exit 1
 esac
@@ -45,8 +55,12 @@ done
 
 echo -e "${YELLOW}Force rebuild: ${FORCE}\nSpawning OFC infrastructure..${NC}"
 
+if [ "${FORCE}" = true ]; then
+    teardown
+fi
+
 docker images | grep -q ${OFC_DATA_IMG}
-if [ $? -eq 0 ] && [ "$FORCE" = false ]; then
+if [ $? -eq 0 ]; then
     echo -e "${YELLOW}Using existing docker image for ofc-sql-data container${NC}"
 else
     echo -e "${YELLOW}Building new image for ofc-sql-data container${NC}"
@@ -55,7 +69,7 @@ fi
 docker run -dit --name ${OFC_DATA_VOL} ${OFC_DATA_IMG}
 
 docker images | grep -q ${OFC_SQL_IMG}
-if [ $? -eq 0 ] && [ "$FORCE" = false ]; then
+if [ $? -eq 0 ]; then
     echo -e "${YELLOW}Using existing docker image for ofc-sql container${NC}"
 else
     echo -e "${YELLOW}Building new image for ofc-sql container${NC}"
@@ -64,7 +78,7 @@ fi
 docker run --volumes-from ${OFC_DATA_VOL} -dit --name ${OFC_SQL} -p 3306:3306 ${OFC_SQL_IMG}
 
 docker images | grep -q ${OFC_SVC_IMG}
-if [ $? -eq 0 ] && [ "$FORCE" = false ]; then
+if [ $? -eq 0 ]; then
     echo -e "${YELLOW}Using existing docker image for ofc-service container${NC}"
 else
     echo -e "${YELLOW}Building new image for ofc-service container${NC}"
