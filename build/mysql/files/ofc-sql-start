@@ -1,0 +1,16 @@
+#!/bin/bash
+# Script to handle startup of sql service, mounting volume from data container 
+
+if [ -d /ofc-data ]; then
+	# Copy over /var/lib/mysql data if currently empty
+	if [ ! "`ls -A /ofc-data`" ]; then
+		cp -r /var/lib/mysql/* /ofc-data
+	fi
+
+	mount -o bind /ofc-data /var/lib/mysql
+fi
+
+chown -R mysql:mysql /var/lib/mysql
+
+service mysql start 
+tail -F /var/log/mysql/error.log

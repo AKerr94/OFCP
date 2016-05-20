@@ -1,7 +1,7 @@
 FROM ubuntu
 MAINTAINER Alastair Kerr
 
-RUN mkdir /var/lib/mysql
-VOLUME /var/lib/mysql
+RUN mkdir /ofc-data
+VOLUME /ofc-data
 
 CMD /bin/bash
