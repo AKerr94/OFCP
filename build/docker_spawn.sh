@@ -14,7 +14,7 @@ FORCE=false
 # Container names
 OFC_SVC="ofc-service"
 OFC_SQL="ofc-sql"
-DATA_VOL="ofc-sql-data"
+OFC_DATA_VOL="ofc-sql-data"
 
 # Image names
 OFC_SVC_IMG="ofc-service-image"
@@ -45,7 +45,14 @@ done
 
 echo -e "${YELLOW}Force rebuild: ${FORCE}\nSpawning OFC infrastructure..${NC}"
 
-# TODO OFC SQL DATA VOL
+docker images | grep -q ${OFC_DATA_IMG}
+if [ $? -eq 0 ] && [ "$FORCE" = false ]; then
+    echo -e "${YELLOW}Using existing docker image for ofc-sql-data container${NC}"
+else
+    echo -e "${YELLOW}Building new image for ofc-sql-data container${NC}"
+    ( cd mysql-data && docker build --no-cache -t ${OFC_DATA_IMG} . )
+fi
+docker run -dit --name ${OFC_DATA_VOL} ${OFC_DATA_IMG}
 
 docker images | grep -q ${OFC_SQL_IMG}
 if [ $? -eq 0 ] && [ "$FORCE" = false ]; then
@@ -54,6 +61,13 @@ else
     echo -e "${YELLOW}Building new image for ofc-sql container${NC}"
     ( cd mysql && docker build --no-cache -t ${OFC_SQL_IMG} . )
 fi
-docker run -it -d --name ${OFC_SQL} -p 3306:3306 ${OFC_SQL_IMG}
+docker run --volumes-from ${OFC_DATA_VOL} -dit --name ${OFC_SQL} -p 3306:3306 ${OFC_SQL_IMG}
 
-# TODO OFC service
+docker images | grep -q ${OFC_SVC_IMG}
+if [ $? -eq 0 ] && [ "$FORCE" = false ]; then
+    echo -e "${YELLOW}Using existing docker image for ofc-service container${NC}"
+else
+    echo -e "${YELLOW}Building new image for ofc-service container${NC}"
+    ( cd ofc && docker build --no-cache -t ${OFC_SVC_IMG} . )
+fi
+docker run -dit --name ${OFC_SVC} -p 8080:8080 ${OFC_SVC_IMG}
