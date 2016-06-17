@@ -42,7 +42,7 @@ cherrypy_config = {
 database_config = {
     'HOST': '172.18.47.11',
     'PORT': 3306,
-    'USER': 'root',
+    'USER': 'ofcdatabaseuser',
     'PASS': 'password',
     'DB': 'ofc',
 }
