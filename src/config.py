@@ -40,7 +40,7 @@ cherrypy_config = {
 
 # Test config
 database_config = {
-    'HOST': '172.18.47.90',
+    'HOST': '172.18.47.11',
     'PORT': 3306,
     'USER': 'root',
     'PASS': 'password',
