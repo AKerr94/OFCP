@@ -13,6 +13,6 @@ PASSWORD="password"
 DOCKER_IP=$(ifconfig | grep -A1 docker0 | tail -n 1 | awk '{print $2}')
 
 # Customise sql commands from variables above
-sed "s/password/${PASSWORD}/g" create_ofc_db.sql.template | \
-sed "s/dockerip/${DOCKER_IP}/g" > create_ofc_db.sql
+sed "s/password/${PASSWORD}/g" /tmp/create_ofc_db.sql.template | \
+sed "s/dockerip/${DOCKER_IP}/g" > /tmp/create_ofc_db.sql
 mysql < /tmp/create_ofc_db.sql
