@@ -43,6 +43,6 @@ database_config = {
     'HOST': '172.18.47.11',
     'PORT': 3306,
     'USER': 'ofcdatabaseuser',
-    'PASS': 'password',
+    'PASS': 'secretdatabasepassword',
     'DB': 'ofc',
 }

@@ -1,5 +1,8 @@
 #!/bin/bash
-# Script to handle startup of sql service, mounting volume from data container 
+# Script to handle startup of sql service, mounting volume from data container
+# Set root password as install leaves this blank 
+
+source config
 
 if [ -d /ofc-data ]; then
 	# Copy over /var/lib/mysql data if currently empty
@@ -14,4 +17,5 @@ chown -R mysql:mysql /var/lib/mysql
 sed -i "s/^bind-address.*/bind-address = 0.0.0.0/g" /etc/mysql/my.cnf
 
 service mysql start 
+mysqladmin -u root password ${ROOT_PASSWORD}
 tail -F /var/log/mysql/error.log

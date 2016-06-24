@@ -1,0 +1,5 @@
+#!/bin/bash
+# Config vars for mysql passwords 
+
+ROOT_PASSWORD="mysecretrootpassword"
+DB_PASSWORD="secretdatabasepassword"
