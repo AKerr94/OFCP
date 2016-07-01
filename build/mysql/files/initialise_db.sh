@@ -1,7 +1,7 @@
 #!/bin/bash
 # Initialise MySQL database
 
-source config
+source /tmp/config
 
 service mysql start &
 mysql_pid=$!

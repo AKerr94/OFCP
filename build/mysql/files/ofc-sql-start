@@ -2,7 +2,7 @@
 # Script to handle startup of sql service, mounting volume from data container
 # Set root password as install leaves this blank 
 
-source config
+source /tmp/config
 
 if [ -d /ofc-data ]; then
 	# Copy over /var/lib/mysql data if currently empty
