@@ -19,6 +19,6 @@ sed -i "s/^bind-address.*/bind-address = 0.0.0.0/g" /etc/mysql/my.cnf
 
 service mysql start 
 mysqladmin -u root password ${ROOT_PASSWORD}
-rm -f ${CONFIG_DIR}/config
+rm -f ${CONFIG_DIR}/config*
 
 tail -F /var/log/mysql/error.log
