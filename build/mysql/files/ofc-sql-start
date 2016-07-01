@@ -2,7 +2,8 @@
 # Script to handle startup of sql service, mounting volume from data container
 # Set root password as install leaves this blank 
 
-source /tmp/config
+CONFIG_DIR=/var/lib/ofc/init
+source ${CONFIG_DIR}/config
 
 if [ -d /ofc-data ]; then
 	# Copy over /var/lib/mysql data if currently empty
@@ -18,4 +19,6 @@ sed -i "s/^bind-address.*/bind-address = 0.0.0.0/g" /etc/mysql/my.cnf
 
 service mysql start 
 mysqladmin -u root password ${ROOT_PASSWORD}
+rm -f ${CONFIG_DIR}/config
+
 tail -F /var/log/mysql/error.log
