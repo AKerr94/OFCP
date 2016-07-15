@@ -186,6 +186,8 @@ class GameHandler(object):
         :return: True/ False
         """
         lastActor = self.game.actingOrder[self.game.actingOrderPointer]
+        
+        # Validate no other player's game state has changed 
         for playerNumber in [x for x in self.game.actingOrder if x != lastActor]:
             if self.playerGameStateIsIdentical(new_game_state, playerNumber) != True:
                 return False

@@ -9,7 +9,7 @@
 
 <body>
 
-<div name="game_id" style="display: none;">{{ game_id }}</div>
+<div name="gameId" style="display: none;">{{ game_id }}</div>
 
 <h1>Open Face Chinese Poker</h1>
 
@@ -21,9 +21,9 @@
     <div class="p_right">
     {% endif %}
         <h2>Player {{i}}</h2>
-        <div name="player{{i}}_top">
+        <div name="player{{i}}Top">
             {% for j in range(1, 4) %}
-                <div class="placement" name="player{{i}}_top{{j}}">
+                <div class="placement" name="player{{i}}Top{{j}}">
                 {% set c = game_state['gameState']['placements'][i|string]['topRow'][j-1] %}
                 {% if c is not none and c|length > 0 %}
                     <img src="../static/cards/{{c}}.png" name={{c}} class="card" draggable="true">
@@ -32,9 +32,9 @@
             {% endfor %}
         </div>
 
-        <div name="player{{i}}_middle">
+        <div name="player{{i}}Middle">
             {% for j in range(1, 6) %}
-                <div class="placement" name="player{{i}}_middle{{j}}">
+                <div class="placement" name="player{{i}}Middle{{j}}">
                 {% set c = game_state['gameState']['placements'][i|string]['middleRow'][j-1] %}
                 {% if c is not none and c|length > 0 %}
                     <img src="../static/cards/{{c}}.png" name={{c}} class="card" draggable="true">
@@ -43,9 +43,9 @@
             {% endfor %}
         </div>
 
-        <div name="player{{i}}_bottom">
+        <div name="player{{i}}Bottom">
             {% for j in range(1, 6) %}
-                <div class="placement" name="player{{i}}_bottom{{j}}">
+                <div class="placement" name="player{{i}}Bottom{{j}}">
                 {% set c = game_state['gameState']['placements'][i|string]['bottomRow'][j-1] %}
                 {% if c is not none and c|length > 0 %}
                     <img src="../static/cards/{{c}}.png" name={{c}} class="card" draggable="true">
@@ -57,6 +57,15 @@
 {% endfor %}
 </div>
 
+<div name="action_bar">
+    <button type="button" name="playButton">Play</button>
+</div>
+
 </body>
+
+<script>
+    var game_id = "{{ game_id }}";
+    alert(game_id);
+</script>
 
 </html>
