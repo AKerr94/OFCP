@@ -8,8 +8,8 @@ class Pineapple(Game):
     Pineapple variant of the game
     """
 
-    def __init__(self, playerCount=2, firstToAct=1, nextToAct=1, actingOrderPointer=0, \
-                 roundNumber=1, roundActionNumber=1, deck=None, deckPointer=0, variant='pineapple'):
+    def __init__(self, playerCount=2, firstToAct=1, nextToAct=1, actingOrderPointer=0, roundNumber=1, \
+                 variant='pineapple', roundActionNumber=1, deck=None, deckPointer=0):
         """
         Initialise - pineapple can be played with max 3 players. If this is OK call super constructor
         :return: None
