@@ -19,34 +19,34 @@
     <div class="p_right">
     {% endif %}
         <h2>Player {{i}}</h2>
-        <div name="player{{i}}Top">
+        <div id="player{{i}}Top">
             {% for j in range(1, 4) %}
-                <div class="placement" name="player{{i}}Top{{j}}">
+                <div class="placement" id="player{{i}}Top{{j}}">
                 {% set c = game_state['gameState']['placements'][i|string]['topRow'][j-1] %}
                 {% if c is not none and c|length > 0 %}
-                    <img src="../static/cards/{{c}}.png" name={{c}} class="card" draggable="true">
+                    <img src="../static/cards/{{c}}.png" id={{c}} class="card" draggable="true">
                 {% endif %}
                 </div>
             {% endfor %}
         </div>
 
-        <div name="player{{i}}Middle">
+        <div id="player{{i}}Middle">
             {% for j in range(1, 6) %}
-                <div class="placement" name="player{{i}}Middle{{j}}">
+                <div class="placement" id="player{{i}}Middle{{j}}">
                 {% set c = game_state['gameState']['placements'][i|string]['middleRow'][j-1] %}
                 {% if c is not none and c|length > 0 %}
-                    <img src="../static/cards/{{c}}.png" name={{c}} class="card" draggable="true">
+                    <img src="../static/cards/{{c}}.png" id={{c}} class="card" draggable="true">
                 {% endif %}
                 </div>
             {% endfor %}
         </div>
 
-        <div name="player{{i}}Bottom">
+        <div id="player{{i}}Bottom">
             {% for j in range(1, 6) %}
-                <div class="placement" name="player{{i}}Bottom{{j}}">
+                <div class="placement" id="player{{i}}Bottom{{j}}">
                 {% set c = game_state['gameState']['placements'][i|string]['bottomRow'][j-1] %}
                 {% if c is not none and c|length > 0 %}
-                    <img src="../static/cards/{{c}}.png" name={{c}} class="card" draggable="true">
+                    <img src="../static/cards/{{c}}.png" id={{c}} class="card" draggable="true">
                 {% endif %}
                 </div>
             {% endfor %}
@@ -55,11 +55,11 @@
 {% endfor %}
 </div>
 
-<div name="action_bar" class="clear padding_top">
-    <button type="button" name="playButton">Play</button>
+<div id="action_bar" class="clear padding_top">
+    <button type="button" id="playButton">Play</button>
     <div class="clear padding_top">
         {% for i in range(1, 6) %}
-        <div class="placement" name="cardToPlace{{i}}"></div>
+        <div class="placement" id="cardToPlace{{i}}"></div>
         {% endfor %} 
     </div>
 </div>
@@ -69,5 +69,7 @@
 <script>
     var game_id = "{{ game_id }}";
 </script>
+
+<script src="../static/js/ofc.js"></script>
 
 </html>

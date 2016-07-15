@@ -5,6 +5,8 @@ from board import Board
 from scorer import Scorer
 import tools
 
+import uuid
+
 
 class Game(object):
     def __init__(self, playerCount=2, firstToAct=1, nextToAct=1, actingOrderPointer=0, \
@@ -33,6 +35,7 @@ class Game(object):
 
         self.board = Board(playerCount=playerCount, deck=deck, deckPointer=deckPointer)
         self.players = self.createPlayers()
+        self.playerIds = self.createPlayerIds()
 
         self.scoring = Scorer(players=self.players, board=self.board)
 
@@ -56,6 +59,17 @@ class Game(object):
                 players.append(p)
 
         return players
+
+    def createPlayerIds(self):
+        """
+        Generate uuid4 for each player
+        This will be used as well as individual game ids for frontend
+        :return: List of player ids
+        """
+        playerIds = []
+        for i in range(0, playerCount):
+            playerIds.append(uuid.uuid4())
+        return playerIds
 
     def resetBoard(self):
         """

@@ -57,6 +57,7 @@ def compileGameState(game):
         gameState['players'][pKey] = {}
         pGs = gameState['players'][pKey]
         pGs['playerNumber'] = i
+        pGs['playerId'] = game.playerIds[i-1]
         pGs['score'] = game.players[i-1].score
         pGs['cards'] = convertCardsListToStr(game.players[i-1].cards)
 
