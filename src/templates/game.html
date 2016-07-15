@@ -9,8 +9,6 @@
 
 <body>
 
-<div name="gameId" style="display: none;">{{ game_id }}</div>
-
 <h1>Open Face Chinese Poker</h1>
 
 <div>
@@ -57,15 +55,19 @@
 {% endfor %}
 </div>
 
-<div name="action_bar">
+<div name="action_bar" class="clear padding_top">
     <button type="button" name="playButton">Play</button>
+    <div class="clear padding_top">
+        {% for i in range(1, 6) %}
+        <div class="placement" name="cardToPlace{{i}}"></div>
+        {% endfor %} 
+    </div>
 </div>
 
 </body>
 
 <script>
     var game_id = "{{ game_id }}";
-    alert(game_id);
 </script>
 
 </html>
