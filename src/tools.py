@@ -30,7 +30,6 @@ def load_dictionary_from_string(obj):
     """
     return ast.literal_eval(obj)
 
-
 def render_template(template, env, **kwargs):
     """
     Returns HTML rendered from template with passed args

@@ -55,17 +55,23 @@ class Api(object):
         game_state = gameHandler.getCompiledGameState()
         self.updateDatabase(game_state, game_id)
 
-        raise cherrypy.HTTPRedirect("/render_game/%s" % game_id)
+        # Redirect game creator as player 1
+        player_id = game_state['players']['1']['playerId']
+        raise cherrypy.HTTPRedirect("/render_game/%s/%s" % (game_id, player_id))
 
-    def render_game(self, game_id=None):
+    def render_game(self, game_id=None, player_id=None):
         """
         Returns page from template using game state information for the provided game id
         :param game_id: uuid4 format id for this game
         :return: HTML rendered from template
         """
-        if (game_id == None):
+        if game_id == None:
             raise cherrypy.HTTPError(500, "No game id was provided for this request!")
         game_id = str(game_id)
+
+        if player_id == None:
+            raise cherrypy.HTTPError(500, "No player id was provided for this request!")
+        player_id = str(player_id)
 
         try:
             game_state = self.db.get_game_state(game_id, sanitised=True)
@@ -73,7 +79,7 @@ class Api(object):
             tools.write_error("Unable to load game state for game id: %s" % game_id)
             raise cherrypy.HTTPError(500, "Failed to load entry for game id '%s' from database!" % game_id)
 
-        return tools.render_template(template='game.html', env=env, game_id=game_id, game_state=game_state)
+        return tools.render_template(template='game.html', env=env, game_id=game_id, game_state=game_state, player_id=player_id)
 
     @cherrypy.tools.json_out()
     def ofc_backend(self, **params):

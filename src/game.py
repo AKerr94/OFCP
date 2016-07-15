@@ -58,8 +58,10 @@ class Game(object):
         :return: List of player ids
         """
         playerIds = []
+
         for i in range(0, self.playerCount):
             playerIds.append(str(uuid.uuid4()))
+
         return playerIds
 
     def resetBoard(self):
@@ -93,6 +95,7 @@ class Game(object):
         :return: string scores interpretation
         """
         self.scoreBoard()
+
         returnStr = ""
         for message in self.scoring.scoresMessages:
             returnStr += message + "\n"
@@ -100,6 +103,7 @@ class Game(object):
         for player in self.players:
             returnStr += "Player %i's total score after this round = %i\n" % \
                          (player.playerNumber, player.score)
+
         return returnStr
 
     def generateActingOrder(self, firstToAct=1):
@@ -201,6 +205,7 @@ class Game(object):
 if __name__ == "__main__":
     # Testing functionality - randomly populating board using game action logic
     playerCount = 4
+
     for gameCount in range(0,1):
         g = Game(playerCount=playerCount, firstToAct=1)
         print("Order of player action: %s\n" % g.actingOrder)
