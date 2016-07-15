@@ -67,7 +67,7 @@ class Game(object):
         :return: List of player ids
         """
         playerIds = []
-        for i in range(0, playerCount):
+        for i in range(0, self.playerCount):
             playerIds.append(uuid.uuid4())
         return playerIds
 
