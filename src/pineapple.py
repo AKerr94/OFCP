@@ -17,8 +17,8 @@ class Pineapple(Game):
         if (playerCount > 3):
             raise ValueError("Pineapple OFCP can have a maximum of 3 players!")
         super(Pineapple, self).__init__(playerCount=self.playerCount, firstToAct=firstToAct, nextToAct=nextToAct, \
-                            actingOrderPointer=actingOrderPointer, roundNumber=roundNumber, variant='pineapple', \
-                            roundActionNumber=roundActionNumber, deck=deck, deckPointer=deckPointer)
+                            actingOrderPointer=actingOrderPointer, roundNumber=roundNumber, roundActionNumber=roundActionNumber, \
+                            deck=deck, deckPointer=deckPointer,variant='pineapple')
 
     # TODO pineapple ofc specific game logic functions/ implementation
 
