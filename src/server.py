@@ -75,8 +75,13 @@ class Api(object):
 
         try:
             game_state = self.db.get_game_state(game_id, sanitised=True)
+
+            playerIds = []
+            for i in range(1, game_state['playerCount'] + 1):
+                playerIds.append(game_state['players'][str(i)]['playerId'])
+            assert player_id in playerIds
         except:
-            tools.write_error("Unable to load game state for game id: %s" % game_id)
+            tools.write_error("Unable to load game state for game id '%s' and player id '%s' from database" % (game_id, player_id))
             raise cherrypy.HTTPError(500, "Failed to load entry for game id '%s' from database!" % game_id)
 
         return tools.render_template(template='game.html', env=env, game_id=game_id, game_state=game_state, player_id=player_id)
