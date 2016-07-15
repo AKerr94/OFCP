@@ -68,7 +68,7 @@ class Game(object):
         """
         playerIds = []
         for i in range(0, self.playerCount):
-            playerIds.append(uuid.uuid4())
+            playerIds.append(str(uuid.uuid4()))
         return playerIds
 
     def resetBoard(self):
