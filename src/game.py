@@ -44,19 +44,10 @@ class Game(object):
         Used to initialise the player objects based on given player requirements
         :return: List of player objects in ascending numerical order
         """
-        player1 = Player(playerNumber=1)
-        player2 = Player(playerNumber=2)
-        player3 = None
-        player4 = None
-        if self.playerCount >= 3:
-            player3 = Player(playerNumber=3)
-        if self.playerCount == 4:
-            player4 = Player(playerNumber=4)
-
         players = []
-        for p in [player1, player2, player3, player4]:
-            if p != None:
-                players.append(p)
+
+        for i in range(1, self.playerCount + 1):
+            players.append(Player(playerNumber=i))
 
         return players
 
