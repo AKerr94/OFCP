@@ -8,10 +8,12 @@ GREEN='\033[0;32m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-#FORCE=true # delete all existing OFC images/ containers and rebuild from scratch
+# If true, delete all existing OFC images/ containers and rebuild from scratch
 FORCE=false 
-# If passed an IP address as arg use this for config for OFCP service 
+# If passed an IP address as arg use this for database config options for OFCP service 
 IP_SET=false
+# If no IP is provided, default behaviour is to not change the IP set in OFCP/src/config.py
+DEFAULT_USE_CONFIG_IP=true
 
 # Container names
 OFC_SVC="ofc-service"
@@ -24,7 +26,7 @@ OFC_SQL_IMG="ofc-sql-image"
 OFC_DATA_IMG="ofc-sql-data-image"
 
 function usage {
-    echo -e "${YELLOW}Usage: -i (host IP) -f (force rebuild) -t (teardown only) -h (help)${NC}"
+    echo -e "${YELLOW}Usage: -i <host IP> -f (force rebuild) -t (teardown only) -a (autodetect host IP) -h (help)${NC}"
     echo "If specifying host IP address with -i, pass this argument first"
 }
 
@@ -57,6 +59,10 @@ case $flag in
       echo -e "${RED}Invalid IPv4 address '${HOST_IP}'${NC}"
       usage && exit 1
     fi
+    shift
+    ;;
+    -a|--autodetect)
+    DEFAULT_USE_CONFIG_IP=false
     shift
     ;;
     *)
@@ -98,6 +104,13 @@ else
     echo -e "${YELLOW}Building new image for ofc-service container${NC}"
     if [ "${IP_SET}" = true ]; then
         echo "${HOST_IP}" > ofc/files/host_ip
+    elif [ "${DEFAULT_USE_CONFIG_IP}" = false ]; then
+        HOST_IP=$(ip route get 1 | awk '{print $NF;exit}')
+        if [ $? -eq 0 ]; then
+            echo ${HOST_IP} > ofc/files/host_ip
+        else
+            echo -e "${RED}Failed to autodetect IP, exiting..${NC}" && exit 1
+        fi
     fi
     ( cd ofc && docker build --no-cache -t ${OFC_SVC_IMG} . )
     ls ofc/files/host_ip > /dev/null 2>&1 && rm -f ofc/files/host_ip
