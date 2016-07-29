@@ -77,7 +77,12 @@ echo -e "${YELLOW}Using provided IP address: ${IP_SET}${NC}"
 if [ "${IP_SET}" = true ]; then
     echo -e "${YELLOW}Provided IP address: ${HOST_IP}${NC}"
 else
-    echo -e "${YELLOW}Auto-detect host IP: ${DEFAULT_USE_CONFIG_IP}${NC}"
+    if [ "${DEFAULT_USE_CONFIG_IP}" = false ]; then
+        AUTO_DETECT=true
+    else
+        AUTO_DETECT=false
+    fi
+    echo -e "${YELLOW}Auto-detect host IP: ${AUTO_DETECT}${NC}"
 fi
 
 if [ "${FORCE}" = true ]; then
