@@ -24,7 +24,8 @@ OFC_SQL_IMG="ofc-sql-image"
 OFC_DATA_IMG="ofc-sql-data-image"
 
 function usage {
-    echo -e "${YELLOW}Usage: -f (force rebuild) -t (teardown only) -i (host IP) -h (help)${NC}"
+    echo -e "${YELLOW}Usage: -i (host IP) -f (force rebuild) -t (teardown only) -h (help)${NC}"
+    echo "If specifying host IP address with -i, pass this argument first"
 }
 
 function teardown {
@@ -52,7 +53,7 @@ case $flag in
     -i|--ip)
     IP_SET=true
     HOST_IP="$2"
-    if ! [[ "{HOST_IP}" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+    if ! [[ "${HOST_IP}" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
       echo -e "${RED}Invalid IPv4 address '${HOST_IP}'${NC}"
       usage && exit 1
     fi
