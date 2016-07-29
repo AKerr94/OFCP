@@ -26,8 +26,8 @@ OFC_SQL_IMG="ofc-sql-image"
 OFC_DATA_IMG="ofc-sql-data-image"
 
 function usage {
-    echo -e "${YELLOW}Usage: -i <host IP> -f (force rebuild) -t (teardown only) -a (autodetect host IP) -h (help)${NC}"
-    echo "If specifying host IP address with -i, pass this argument first"
+    echo -e "${YELLOW}Usage: -a (autodetect host IP) -i <host IP> -f (force rebuild) -t (teardown only) -h (help)${NC}"
+    echo "If using the -a or -i flags, pass these as the first arguments"
 }
 
 function teardown {
@@ -40,16 +40,16 @@ while [[ $# > 0 ]]
 do
 flag="$1"
 case $flag in
+    -a|--autodetect)
+    DEFAULT_USE_CONFIG_IP=false
+    shift
+    ;;
     -f|--force)
     FORCE=true
     shift
     ;;
     -h|--help)
     usage && exit 0
-    shift
-    ;;
-    -t|--teardown)
-    teardown && exit 0
     shift
     ;;
     -i|--ip)
@@ -61,8 +61,8 @@ case $flag in
     fi
     shift
     ;;
-    -a|--autodetect)
-    DEFAULT_USE_CONFIG_IP=false
+    -t|--teardown)
+    teardown && exit 0
     shift
     ;;
     *)
@@ -71,7 +71,14 @@ esac
 shift
 done
 
+# Print info about interpreted command line arguments  
 echo -e "${YELLOW}Force rebuild: ${FORCE}${NC}"
+echo -e "${YELLOW}Using provided IP address: ${IP_SET}${NC}"
+if [ "${IP_SET}" = true ]; then
+    echo -e "${YELLOW}Provided IP address: ${HOST_IP}${NC}"
+else
+    echo -e "${YELLOW}Auto-detect host IP: ${DEFAULT_USE_CONFIG_IP}${NC}"
+fi
 
 if [ "${FORCE}" = true ]; then
     teardown
@@ -79,6 +86,7 @@ fi
 
 echo -e "${YELLOW}Spawning OFC infrastructure..${NC}"
 
+# Database Data Container - Build image if necessary, and spawn container
 docker images | grep -q ${OFC_DATA_IMG}
 if [ $? -eq 0 ]; then
     echo -e "${YELLOW}Using existing docker image for ofc-sql-data container${NC}"
@@ -88,6 +96,7 @@ else
 fi
 docker run -dit --name ${OFC_DATA_VOL} ${OFC_DATA_IMG}
 
+# Database Service Container - Build image if necessary, and spawn container
 docker images | grep -q ${OFC_SQL_IMG}
 if [ $? -eq 0 ]; then
     echo -e "${YELLOW}Using existing docker image for ofc-sql container${NC}"
@@ -97,6 +106,7 @@ else
 fi
 docker run --privileged --volumes-from ${OFC_DATA_VOL} -dit --name ${OFC_SQL} -p 3306:3306 ${OFC_SQL_IMG}
 
+# OFCP Service Container - Build image if necessary, and spawn container
 docker images | grep -q ${OFC_SVC_IMG}
 if [ $? -eq 0 ]; then
     echo -e "${YELLOW}Using existing docker image for ofc-service container${NC}"
@@ -107,7 +117,7 @@ else
     elif [ "${DEFAULT_USE_CONFIG_IP}" = false ]; then
         HOST_IP=$(ip route get 1 | awk '{print $NF;exit}')
         if [ $? -eq 0 ]; then
-            echo ${HOST_IP} > ofc/files/host_ip
+            echo "${HOST_IP}" > ofc/files/host_ip
         else
             echo -e "${RED}Failed to autodetect IP, exiting..${NC}" && exit 1
         fi
