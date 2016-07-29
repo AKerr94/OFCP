@@ -10,6 +10,8 @@ NC='\033[0m'
 
 #FORCE=true # delete all existing OFC images/ containers and rebuild from scratch
 FORCE=false 
+# If passed an IP address as arg use this for config for OFCP service 
+IP_SET=false
 
 # Container names
 OFC_SVC="ofc-service"
@@ -22,7 +24,7 @@ OFC_SQL_IMG="ofc-sql-image"
 OFC_DATA_IMG="ofc-sql-data-image"
 
 function usage {
-    echo -e "${YELLOW}Usage: -f (force rebuild) -t (teardown only) -h (help)${NC}"
+    echo -e "${YELLOW}Usage: -f (force rebuild) -t (teardown only) -i (host IP) -h (help)${NC}"
 }
 
 function teardown {
@@ -45,6 +47,15 @@ case $flag in
     ;;
     -t|--teardown)
     teardown && exit 0
+    shift
+    ;;
+    -i|--ip)
+    IP_SET=true
+    HOST_IP="$2"
+    if ! [[ "{HOST_IP}" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+      echo -e "${RED}Invalid IPv4 address '${HOST_IP}'${NC}"
+      usage && exit 1
+    fi
     shift
     ;;
     *)
@@ -84,6 +95,10 @@ if [ $? -eq 0 ]; then
     echo -e "${YELLOW}Using existing docker image for ofc-service container${NC}"
 else
     echo -e "${YELLOW}Building new image for ofc-service container${NC}"
+    if [ "${IP_SET}" = true ]; then
+        echo "${HOST_IP}" > ofc/files/host_ip
+    fi
     ( cd ofc && docker build --no-cache -t ${OFC_SVC_IMG} . )
+    ls ofc/files/host_ip > /dev/null 2>&1 && rm -f ofc/files/host_ip
 fi
 docker run -dit --name ${OFC_SVC} -p 8080:8080 ${OFC_SVC_IMG}
