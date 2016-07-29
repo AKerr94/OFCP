@@ -27,7 +27,6 @@ OFC_DATA_IMG="ofc-sql-data-image"
 
 function usage {
     echo -e "${YELLOW}Usage: -a (autodetect host IP) -i <host IP> -f (force rebuild) -t (teardown only) -h (help)${NC}"
-    echo "If using the -a or -i flags, pass these as the first arguments"
 }
 
 function teardown {
@@ -42,15 +41,12 @@ flag="$1"
 case $flag in
     -a|--autodetect)
     DEFAULT_USE_CONFIG_IP=false
-    shift
     ;;
     -f|--force)
     FORCE=true
-    shift
     ;;
     -h|--help)
     usage && exit 0
-    shift
     ;;
     -i|--ip)
     IP_SET=true
@@ -63,7 +59,6 @@ case $flag in
     ;;
     -t|--teardown)
     teardown && exit 0
-    shift
     ;;
     *)
     echo -e "${RED}Unknown flag `echo $flag | tr -d '-'`${NC}" && usage && exit 1
